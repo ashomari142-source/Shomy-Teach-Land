@@ -147,11 +147,11 @@ const getGreeting = (hour) => {
 const buildSections = (menuData) => {
     return menuData.map(cat => ({
         title: `${cat.icon} ${cat.title} (${cat.items.length})`,
-        highlight_label: `${cat.items.length} commands`,
-        rows: cat.items.slice(0, 20).map(item => ({
+        highlight_label: `${cat.items.length} cmds`,
+        rows: cat.items.slice(0, 10).map(item => ({
             title: item.cmd,
-            description: item.desc ? item.desc.substring(0, 25) : '📌 Available command',
-            id: item.cmd 
+            description: item.desc ? item.desc.substring(0, 18) : '📌 Cmd',
+            id: item.cmd
         }))
     }));
 };
@@ -183,24 +183,7 @@ const menuCommand = async (sock, chatId, m, userDb = null) => {
         // ==============================================
         // ✨ HEADER ILIYOBORESHA - DESIGN NZURI
         // ==============================================
-        const menuText = `
-╔═══════════════════════════╗
-║  ✨ *𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍* ✨  ║
-╚═══════════════════════════╝
-
-${greeting.emoji} *Habari za ${greeting.text}* ${userName}!
-
-📅 *Tarehe:* ${date}
-⏰ *Saa:* ${time}
-🕐 *Uptime:* ${uptime}
-
-╔═══════════════════════════╗
-║     📂 *MENU OPTIONS*      ║
-╚═══════════════════════════╝
-
-👇 *Bonyeza vitufe vilivyo hapa chini:*
-
-❤️ *All* | 🚀 *Powered by 𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍*`;
+        const menuText = `${greeting.emoji} *${greeting.text} ${userName}!*\n📅 ${date} • ⏰ ${time}\n🕐 Uptime: ${uptime}\n\n📂 Choose a button below.`;
 
         // ==============================================
         // 📤 SEND INTERACTIVE MENU - BUTTON ZIMEBORESHA
@@ -210,49 +193,49 @@ ${greeting.emoji} *Habari za ${greeting.text}* ${userName}!
             .setFooter(buildFooter())
             .setThumbnail('https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg');
 
-        // 🔘 BUTTON 1: Menu List - IMEBORESHA
+        // 🔘 BUTTON 1: Menu List - compact category picker
         buttonV2.addRawButton({
-            buttonText: { displayText: '📂 Orodha ya Commands' },
+            buttonText: { displayText: '📂 Commands' },
             buttonId: 'mickey_list_menu',
             type: 1,
             nativeFlowInfo: {
                 name: 'single_select',
                 paramsJson: JSON.stringify({
-                    title: '📂 Select Command Category',
+                    title: '📂 Categories',
                     sections: buildSections(menuData)
                 })
             }
         });
 
-        // 🔘 BUTTON 2: Command ya Quick Reply
+        // 🔘 BUTTON 2: Owner Info
         buttonV2.addRawButton({
-            buttonText: { displayText: '👑 Owner Info' },
+            buttonText: { displayText: '👑 Owner' },
             buttonId: '.owner',
             type: 1,
             nativeFlowInfo: {
                 name: 'quick_reply',
                 paramsJson: JSON.stringify({
-                    display_text: '👑 Owner Info',
+                    display_text: '👑 Owner',
                     id: '.owner'
                 })
             }
         });
 
-        // 🔘 BUTTON 3: Stats (New)
+        // 🔘 BUTTON 3: Stats
         buttonV2.addRawButton({
-            buttonText: { displayText: '📊 Bot Stats' },
+            buttonText: { displayText: '📊 Stats' },
             buttonId: '.stats',
             type: 1,
             nativeFlowInfo: {
                 name: 'quick_reply',
                 paramsJson: JSON.stringify({
-                    display_text: '📊 Bot Stats',
+                    display_text: '📊 Stats',
                     id: '.stats'
                 })
             }
         });
 
-        // 🔘 BUTTON 4: Ping (New)
+        // 🔘 BUTTON 4: Ping
         buttonV2.addRawButton({
             buttonText: { displayText: '🏓 Ping' },
             buttonId: '.ping',

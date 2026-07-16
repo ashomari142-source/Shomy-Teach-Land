@@ -45,26 +45,20 @@ const pingCommand = async (sock, chatId, msg, args) => {
         const botUptime = formatUptime(process.uptime());
         const cpuCores = os.cpus().length;
         
-        const text = `📡 *𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍  - Speedtest*
-
-*— PERFORMANCE —*
-⚡ *Ping:* ${latency}ms ${pingEmoji}
-⏱️ *Uptime:* ${botUptime}
-
-*— SERVER STATS —*
-🖥️ *CPU:* ${cpuCores} Cores
-💾 *RAM:* ${formatBytes(usedMem)} / ${formatBytes(totalMem)} (${memPercent}%)
-
-_𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍™_`;
+        const text = `📡 *𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍*
+⚡ ${latency}ms ${pingEmoji}
+⏱️ ${botUptime}
+🖥️ ${cpuCores} cores
+💾 ${formatBytes(usedMem)}/${formatBytes(totalMem)} (${memPercent}%)`;
 
         try {
             const buttonBuilder = new ButtonV2(sock)
-                .text(`⚡ Ping: ${latency}ms ${pingEmoji}\n⏱️ Uptime: ${botUptime}\n🖥️ CPU: ${cpuCores} Cores\n💾 RAM: ${formatBytes(usedMem)} / ${formatBytes(totalMem)} (${memPercent}%)`)
+                .text(`⚡ ${latency}ms ${pingEmoji} • ${botUptime}\n🖥️ ${cpuCores} cores • 💾 ${formatBytes(usedMem)}/${formatBytes(totalMem)} (${memPercent}%)`)
                 .setThumbnail('https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg')
                 .button('📦 Menu', '.menu')
                 .button('📊 Stats', '.stats')
                 .button('🧠 AI', '.ai')
-                .setFooter('Tap a quick action');
+                .setFooter('Quick actions');
 
             await buttonBuilder.send(ctx.chatId, { quoted: ctx._msg, fallbackText: text });
 
