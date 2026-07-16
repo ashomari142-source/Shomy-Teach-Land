@@ -34,7 +34,7 @@ const getBotName = () => {
             return config.botName || '𝐌𝐈𝐂𝐊𝐄𝐘-𝐕𝟑';
         }
     } catch (e) {}
-    return '𝐌𝐈𝐂𝐊𝐄𝐘-𝐕𝟑';
+    return '𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍';
 };
 
 /**
@@ -133,7 +133,7 @@ const aliveCommand = async (sock, chatId, message) => {
         const botStartTime = global.botStartTime || Date.now();
         const botUptime = formatUptime(Math.floor((Date.now() - botStartTime) / 1000));
 
-        const imageUrl = 'https://raw.githubusercontent.com/Mickeymozy/Mickey-Vip/main/chatbot.png';
+        const imageUrl = 'https://n.uguu.se/nnSQSNZU.jpg';
 
         const statusMessage = `🚀 *${botName} Status*
 
@@ -160,7 +160,7 @@ ${ramPercent < 70 ? '🟢 Status: Perfect' : ramPercent < 85 ? '🟡 Status: Sta
 
 _Mickey Glitch Technology™_`;
 
-        const footer = '𝐌𝐢𝐜𝐤𝐞𝐲 𝐆𝐥𝐢𝐭𝐜𝐡 𝐓𝐞𝐜𝐡𝐧𝐨𝐥𝐨𝐠𝐲';
+        const footer = '𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 ';
 
         const fetchBuffer = async (url) => {
             const res = await axios.get(url, { responseType: 'arraybuffer', timeout: 10000 });
