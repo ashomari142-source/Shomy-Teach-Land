@@ -54,7 +54,7 @@ const pingCommand = async (sock, chatId, msg, args) => {
         try {
             const buttonBuilder = new ButtonV2(sock)
                 .text(`⚡ ${latency}ms ${pingEmoji} • ${botUptime}\n🖥️ ${cpuCores} cores • 💾 ${formatBytes(usedMem)}/${formatBytes(totalMem)} (${memPercent}%)`)
-                .setThumbnail('https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg')
+                .setThumbnail('https://raw.githubusercontent.com/Mickeymozy/Shomy-Teach-Land-/main/OMMY.jpg')
                 .button('📦 Menu', '.menu')
                 .button('📊 Stats', '.stats')
                 .button('🧠 AI', '.ai')

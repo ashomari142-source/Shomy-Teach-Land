@@ -93,7 +93,7 @@ async function showNixellLiveSample(sock, chatId, msg, example, content) {
         const title = example.title.toLowerCase();
 
         if (title.includes('thumbnail edit') || title.includes('tmte')) {
-            const imgUrl = "https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg";
+            const imgUrl = "https://raw.githubusercontent.com/Mickeymozy/Shomy-Teach-Land-/main/OMMY.jpg";
             await sock.sendMessage(chatId, {
                 text: '🖼️ *Thumbnail Edit Live Sample*\n\nInaonyesha jinsi ya kubadilisha thumbnail ya link...',
                 linkPreview: {
@@ -105,7 +105,7 @@ async function showNixellLiveSample(sock, chatId, msg, example, content) {
             return true;
         }
         else if (title.includes('stickerpack') || title.includes('tspk')) {
-            const stickerUrl = "https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg";
+            const stickerUrl = "https://raw.githubusercontent.com/Mickeymozy/Shomy-Teach-Land-/main/OMMY.jpg";
             const media = await baileys.prepareWAMessageMedia({ image: { url: stickerUrl } }, { upload: sock.waUploadToServer });
             await sock.sendMessage(chatId, {
                 sticker: media,
@@ -142,10 +142,10 @@ const sourceCommand = async (sock, chatId, msg, args) => {
     const input = Array.isArray(args) ? args.join(' ').trim() : (args || '').toString().trim();
 
     // Raw links za picha
-    const img1 = "https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg";
-    const img2 = "https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg";
-    const img3 = "https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg";
-    const img4 = "https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg";
+    const img1 = "https://raw.githubusercontent.com/Mickeymozy/Shomy-Teach-Land-/main/OMMY.jpg";
+    const img2 = "https://raw.githubusercontent.com/Mickeymozy/Shomy-Teach-Land-/main/OMMY.jpg";
+    const img3 = "https://raw.githubusercontent.com/Mickeymozy/Shomy-Teach-Land-/main/OMMY.jpg";
+    const img4 = "https://raw.githubusercontent.com/Mickeymozy/Shomy-Teach-Land-/main/OMMY.jpg";
     const sampleVideo = "https://n.uguu.se/VfoPbJXx.mp4";
 
     // ─── 1. MENU KUU ───

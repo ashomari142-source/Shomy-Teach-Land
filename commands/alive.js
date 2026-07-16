@@ -133,7 +133,7 @@ const aliveCommand = async (sock, chatId, message) => {
         const botStartTime = global.botStartTime || Date.now();
         const botUptime = formatUptime(Math.floor((Date.now() - botStartTime) / 1000));
 
-        const imageUrl = 'https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg';
+        const imageUrl = 'https://raw.githubusercontent.com/Mickeymozy/Shomy-Teach-Land-/main/OMMY.jpg';
 
         const statusMessage = `🚀 *${botName} Status*
 

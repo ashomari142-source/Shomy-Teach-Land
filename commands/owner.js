@@ -17,7 +17,7 @@ const CONFIG = {
         GITHUB: 'github.com/Mickeymozy'
     },
     // ✅ Picha Moja Tu (Imebadilishwa)
-    IMAGE: 'https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg'
+    IMAGE: 'https://raw.githubusercontent.com/Mickeymozy/Shomy-Teach-Land-/main/OMMY.jpg'
 };
 
 /**

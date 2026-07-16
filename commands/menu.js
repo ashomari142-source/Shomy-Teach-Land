@@ -191,7 +191,7 @@ const menuCommand = async (sock, chatId, m, userDb = null) => {
         const buttonV2 = new ButtonV2(sock)
             .setBody(menuText)
             .setFooter(buildFooter())
-            .setThumbnail('https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg');
+            .setThumbnail('https://raw.githubusercontent.com/Mickeymozy/Shomy-Teach-Land-/main/OMMY.jpg');
 
         // 🔘 BUTTON 1: Menu List - compact category picker
         buttonV2.addRawButton({

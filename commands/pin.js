@@ -7,7 +7,7 @@ const { generateWAMessageFromContent } = require('@whiskeysockets/baileys');
 // CONFIGURATION
 const CONFIG = {
     FOOTER: '𝐌𝐢𝐜𝐤𝐞𝐲 𝐆𝐥𝐢𝐭𝐜𝐡 𝐓𝐞𝐜𝐡𝐧𝐨𝐥𝐨𝐠𝐲',
-    BANNER: 'https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg',
+    BANNER: 'https://raw.githubusercontent.com/Mickeymozy/Shomy-Teach-Land-/main/OMMY.jpg',
     FILE_PATH: path.join(__dirname, '../data/pinConfig.json'),
     DEFAULT_PIN: '0000',
     DURATION: 60 * 60 * 1000 // 1 hour
