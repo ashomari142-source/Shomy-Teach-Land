@@ -9,11 +9,13 @@ const aiCommand = async (sock, chatId, msg, args) => {
     const query = Array.isArray(args) ? args.join(' ') : args;
 
     if (!query) {
-        return sock.sendMessage(chatId, { 
-            text: '╭━━━〔 *𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 AI* 〕━━━┈⊷\n┃\n┃ 📝 *Usage:* `.ai [swali lako]`\n┃ 💡 *Example:* `.ai mambo vipi?`\n┃\n╰━━━━━━━━━━━━━━━━━━━━┈⊷' 
+        return sock.sendMessage(chatId, {
+            text: '╭━━━〔 *𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 AI* 〕━━━┈⊷\n┃\n┃ 📝 *Usage:* `.ai [swali lako]`\n┃ 💡 *Example:* `.ai mambo vipi?`\n┃\n╰━━━━━━━━━━━━━━━━━━━━┈⊷'
+        }, { quoted: msg });
+    }
 
     // Ulinzi wa urefu wa text kuzuia crash
-    if (query.length > 5000) {
+    if (String(query).length > 5000) {
         return sock.sendMessage(chatId, { text: '⚠️ *Mzee, swali lako ni refu kupita kiasi! Punguza kidogo.*' }, { quoted: msg });
     }
 
