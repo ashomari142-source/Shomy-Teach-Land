@@ -161,7 +161,7 @@ const menuCommand = async (sock, chatId, m, userDb = null) => {
         const date = now.format('DD MMMM YYYY'); 
         const time = now.format('HH:mm:ss');
 
-        const menuText = `✨ *MICKEY GLITCH V3.0.5*
+        const menuText = `✨ * 𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 *
 👋 *Habari za ${greeting.text}* ${greeting.emoji}
 👤 *User:* ${userName}
 📅 *Date:* ${date} | ⏰ *Time:* ${time}
@@ -176,7 +176,7 @@ const menuCommand = async (sock, chatId, m, userDb = null) => {
             .setBody(menuText)
             .setFooter(`MICKEY BOT`)
             // FIXED: URL ya picha sasa imenyooka kwenye mstari mmoja bila kukatika
-            .setThumbnail('https://raw.githubusercontent.com/Mickeymozy/Mickey-Vip/main/Privacy/menu.png')
+            .setThumbnail('https://n.uguu.se/nnSQSNZU.jpg')
             // Row Button 1: List Menu (Original format)
             .addRawButton({
                 buttonText: { displayText: 'Menu 📂' },
