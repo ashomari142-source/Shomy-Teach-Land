@@ -11,11 +11,11 @@ module.exports = {
                 title = 'ᗰ𝒾匚кⓔ𝕐',
                 subtitle = 'View details',
                 profileUrl = 'https://telegra.ph/file/6f714e30054a1dbd65fb4.png',
-                caption = 'Hi! This is Mickey Glitch.'
+                caption = 'Hi! This is 𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 .'
             ] = input.split('|').map((part) => part.trim()).filter(Boolean);
 
             const config = ctx.config || {};
-            const botName = config.bot?.name || config.botName || config.botname || 'MICKEY BOT';
+            const botName = config.bot?.name || config.botName || config.botname || '';
 
             await new Button(ctx.core)
                 .setTitle(botName)
