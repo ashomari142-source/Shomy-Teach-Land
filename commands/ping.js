@@ -45,7 +45,7 @@ const pingCommand = async (sock, chatId, msg, args) => {
         const botUptime = formatUptime(process.uptime());
         const cpuCores = os.cpus().length;
         
-        const text = `📡 *Mickey Glitch - Speedtest*
+        const text = `📡 *𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍  - Speedtest*
 
 *— PERFORMANCE —*
 ⚡ *Ping:* ${latency}ms ${pingEmoji}
@@ -60,7 +60,7 @@ _Mickey Glitch Technology™_`;
         try {
             const buttonBuilder = new ButtonV2(sock)
                 .text(`⚡ Ping: ${latency}ms ${pingEmoji}\n⏱️ Uptime: ${botUptime}\n🖥️ CPU: ${cpuCores} Cores\n💾 RAM: ${formatBytes(usedMem)} / ${formatBytes(totalMem)} (${memPercent}%)`)
-                .setThumbnail('https://raw.githubusercontent.com/Mickeymozy/Mickey-Vip/main/chatbot.png')
+                .setThumbnail('https://n.uguu.se/nnSQSNZU.jpg')
                 .button('📦 Menu', '.menu')
                 .button('📊 Stats', '.stats')
                 .button('🧠 AI', '.ai')
