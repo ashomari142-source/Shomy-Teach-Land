@@ -11,8 +11,8 @@ const execAsync = util.promisify(exec);
 
 // CONFIGURATION
 const CONFIG = {
-    FOOTER: '𝐌𝐢𝐜𝐤𝐞𝐲 𝐆𝐥𝐢𝐭𝐜𝐡 𝐓𝐞𝐜𝐡𝐧𝐨𝐥𝐨𝐠𝐲',
-    BANNER: 'https://github.com/Mickeymozy/Mickey-Vip/blob/main/chatbot.png?raw=true'
+    FOOTER: '𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 ',
+    BANNER: 'https://n.uguu.se/nnSQSNZU.jpg'
 };
 
 async function shazamCommand(sock, chatId, message) {
