@@ -166,7 +166,7 @@ async function instagramCommand(sock, chatId, message) {
                             video: finalBuffer,
                             mimetype: 'video/mp4',
                             fileName: `instagram.mp4`,
-                            caption: "𝙼𝚒𝚌𝚔𝚎𝚢 𝙶𝚕𝚒𝚝𝚌𝚑™"
+                            caption: "𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 ™"
                         }, { quoted: message });
                     } else {
                         // Fallback to URL send
@@ -181,7 +181,7 @@ async function instagramCommand(sock, chatId, message) {
                     await sock.sendMessage(chatId, {
                         video: { url: mediaUrl },
                         mimetype: "video/mp4",
-                        caption: "𝙼𝚒𝚌𝚔𝚎𝚢 𝙶𝚕𝚒𝚝𝚌𝚑™"
+                        caption: "𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 ™"
                     }, { quoted: message });
                 }
             } else {
