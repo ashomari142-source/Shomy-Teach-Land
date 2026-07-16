@@ -88,7 +88,7 @@ module.exports = async (sock, chatId, senderId, args, m) => {
 
         // Muundo wa AIRich kwa kutumia addTable moja tu kubwa
         const rich = new AIRich(sock)
-            .setTitle('🤖 MICKEY GLITCH ENGINE')
+            .setTitle('𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 ')
             .addTable([
                 ["METRIC / COMPONENT", "VALUE / STATUS"],
                 // --- REGISTRY STATUS ---
