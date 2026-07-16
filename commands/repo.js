@@ -10,7 +10,7 @@ const CONFIG = {
     FOOTER: '🪐 ᴍɪᴄᴋᴇʏ ɢʟɪᴛᴄʜ ᴍᴅ • 𝟸𝟶𝟸𝟼 🪐',
     REPO_URL: 'https://github.com/Mickeydeveloper/Mickey-Glitch',
     // Picha mpya uliyotuma (iliyowekwa raw=true ili ipatikane kama picha ya ukweli)
-    BANNER: 'https://github.com/Mickeymozy/Mickey-Vip/blob/main/chatbot.png?raw=true',
+    BANNER: 'https://n.uguu.se/nnSQSNZU.jpg',
     VERSION: '3.3.0',
     MODE: 'PUBLIC'
 };
@@ -148,7 +148,7 @@ async function repoCommand(sock, chatId, m, body = '') {
         // ========== 2. HANDLE VIEW REPO ==========
         if (input === 'view_repo') {
             try { await sock.sendMessage(chatId, { react: { text: '🌐', key: safeKey } }); } catch(e) {}
-            const repoMessage = `🛸 *MICKEY GLITCH GITHUB*\n\nRepository: ${CONFIG.REPO_URL}\n\nBenefits: Latest features, bug fixes, community support`;
+            const repoMessage = `🛸 *𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 *\n\nRepository: ${CONFIG.REPO_URL}\n\nBenefits: Latest features, bug fixes, community support`;
 
             const nativeButtons = [
                 { buttonId: 'download_zip', buttonText: { displayText: '📦 Download ZIP' }, type: 1 },
@@ -187,7 +187,7 @@ async function repoCommand(sock, chatId, m, body = '') {
             const statusMessage = `🛸 *BOT REPOSITORY*
 
 *— INFO —*
-🛸 *Bot:* Mickey Glitch MD
+🛸 *Bot:* 𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 
 📦 *Ver:* ${CONFIG.VERSION}
 🖥️ *Host:* ${isRunningOnVPS ? 'VPS' : 'Local'}
 
@@ -219,7 +219,7 @@ _Use buttons below to interact._`;
 └── .view_repo - Open GitHub
 
 💡 *Usage:* Type any command above
-🛸 *Bot:* Mickey Glitch MD`;
+🛸 *Bot:* 𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 `;
 
             await sock.sendMessage(chatId, { text: helpMessage }, { quoted: safeM });
         }
