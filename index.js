@@ -48,7 +48,7 @@ try {
 const pinoLogger = pino({ level: 'silent' });
 
 // --- Global Settings ---
-const _botName = settings.botName || settings.botname || "𝙼𝚒𝚌𝚔𝚎𝚢 𝙶𝚕𝚒𝚝𝚌𝚑™";
+const _botName = settings.botName || settings.botname || "𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 ™";
 global.botname = _botName;
 global.botName = _botName;
 global.themeemoji = '•';
