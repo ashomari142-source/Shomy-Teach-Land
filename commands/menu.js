@@ -194,20 +194,13 @@ ${greeting.emoji} *Habari za ${greeting.text}* ${userName}!
 ⏰ *Saa:* ${time}
 🕐 *Uptime:* ${uptime}
 
-📊 *Statistiki:*
-├─ 👥 *Watumiaji:* ${stats.users}
-├─ 🏠 *Vikundi:* ${stats.groups}
-├─ ⚡ *Commands:* ${stats.cmdCount}
-├─ 🎯 *Imetekelezwa:* ${stats.commandsExecuted}
-└─ 💾 *RAM:* ${stats.memoryUsed}MB / ${stats.memoryTotal}MB
-
 ╔═══════════════════════════╗
 ║     📂 *MENU OPTIONS*      ║
 ╚═══════════════════════════╝
 
 👇 *Bonyeza vitufe vilivyo hapa chini:*
 
-❤️ *I love mom* | 🚀 *Powered by Quantum Base*`;
+❤️ *All* | 🚀 *Powered by Mickey Developer*`;
 
         // ==============================================
         // 📤 SEND INTERACTIVE MENU - BUTTON ZIMEBORESHA
