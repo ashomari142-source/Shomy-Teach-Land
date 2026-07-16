@@ -2,7 +2,7 @@ const axios = require('axios');
 const { sendInteractiveMessage } = require('../lib/myfunc');
 
 /**
- * Mickey Glitch - Text Styling Command
+ * 𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 - Text Styling Command
  * Powered by Prexzy Villa API
  */
 

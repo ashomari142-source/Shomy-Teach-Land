@@ -17,7 +17,7 @@ const CONFIG = {
         GITHUB: 'github.com/Mickeymozy'
     },
     // ✅ Picha Moja Tu (Imebadilishwa)
-    IMAGE: 'https://n.uguu.se/nnSQSNZU.jpg'
+    IMAGE: 'https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg'
 };
 
 /**
@@ -53,7 +53,7 @@ const ownerCommand = async (sock, chatId, message) => {
 
 👇 *Bonyeza vitufe vilivyo hapa chini:*
 
-❤️ *Mickey Glitch Technology™*`;
+❤️ *𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍™*`;
 
         // 3. Buttons zilizoboreshwa (3 buttons)
         const nativeButtons = [
@@ -116,7 +116,7 @@ const ownerCommand = async (sock, chatId, message) => {
                 forwardingScore: 999,
                 isForwarded: true,
                 forwardingSource: {
-                    name: 'Mickey Glitch Bot'
+                    name: '𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍'
                 }
             };
             

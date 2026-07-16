@@ -1,5 +1,5 @@
 /**
- * 🤖 MICKEY GLITCH - MAIN HANDLER WITH MANUAL IMPORTS ONLY
+ * 🤖 𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 - MAIN HANDLER WITH MANUAL IMPORTS ONLY
  * Clean & Optimized Version - No Auto-Loading
  * Fixed: Command double-trigger bug resolved
  */
@@ -331,7 +331,7 @@ const profileCardCommand = normalizeBotCommand(profileCardModule);
 global.packname = settings.packname;
 global.author = settings.author;
 global.channelLink = "https://whatsapp.com/channel/0029Vb6B9xFCxoAseuG1g610";
-global.ytch = "MICKEY";
+global.ytch = "𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍";
 
 // Load special handlers for background processing
 global.autostatusHandler = require(path.join(process.cwd(), 'commands', 'autostatus.js'));
@@ -830,7 +830,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
                 const customConfig = {
                     ...settings,
                     bot: {
-                        name: settings.botName || settings.botname || settings.botOwner || 'MICKEY BOT',
+                        name: settings.botName || settings.botname || settings.botOwner || '𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍',
                     },
                 };
 
@@ -1066,7 +1066,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
                     const customConfig = {
                         ...settings,
                         bot: {
-                            name: settings.botName || settings.botname || settings.botOwner || 'MICKEY BOT',
+                            name: settings.botName || settings.botname || settings.botOwner || '𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍',
                         },
                     };
 

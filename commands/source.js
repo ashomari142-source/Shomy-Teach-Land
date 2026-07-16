@@ -93,7 +93,7 @@ async function showNixellLiveSample(sock, chatId, msg, example, content) {
         const title = example.title.toLowerCase();
 
         if (title.includes('thumbnail edit') || title.includes('tmte')) {
-            const imgUrl = "https://raw.githubusercontent.com/Mickeymozy/Mickey-Vip/main/Privacy/connection.jpg";
+            const imgUrl = "https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg";
             await sock.sendMessage(chatId, {
                 text: '🖼️ *Thumbnail Edit Live Sample*\n\nInaonyesha jinsi ya kubadilisha thumbnail ya link...',
                 linkPreview: {
@@ -105,7 +105,7 @@ async function showNixellLiveSample(sock, chatId, msg, example, content) {
             return true;
         }
         else if (title.includes('stickerpack') || title.includes('tspk')) {
-            const stickerUrl = "https://raw.githubusercontent.com/Mickeymozy/Mickey-Vip/main/Privacy/privacy1.jpg";
+            const stickerUrl = "https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg";
             const media = await baileys.prepareWAMessageMedia({ image: { url: stickerUrl } }, { upload: sock.waUploadToServer });
             await sock.sendMessage(chatId, {
                 sticker: media,
@@ -142,10 +142,10 @@ const sourceCommand = async (sock, chatId, msg, args) => {
     const input = Array.isArray(args) ? args.join(' ').trim() : (args || '').toString().trim();
 
     // Raw links za picha
-    const img1 = "https://raw.githubusercontent.com/Mickeymozy/Mickey-Vip/main/Privacy/connection.jpg";
-    const img2 = "https://raw.githubusercontent.com/Mickeymozy/Mickey-Vip/main/Privacy/privacy1.jpg";
-    const img3 = "https://raw.githubusercontent.com/Mickeymozy/Mickey-Vip/main/Privacy/privacy2.jpg";
-    const img4 = "https://raw.githubusercontent.com/Mickeymozy/Mickey-Vip/main/Privacy/privacy3.jpg";
+    const img1 = "https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg";
+    const img2 = "https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg";
+    const img3 = "https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg";
+    const img4 = "https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg";
     const sampleVideo = "https://n.uguu.se/VfoPbJXx.mp4";
 
     // ─── 1. MENU KUU ───
@@ -154,10 +154,10 @@ const sourceCommand = async (sock, chatId, msg, args) => {
             const nixellExamples = await fetchNixellExamples();
 
             const mainMenus = new Button(sock)
-                .setTitle('🧩 Mickey Glitch Lab v4.9')
+                .setTitle('🧩 𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 Lab v4.9')
                 .setSubtitle('Core & Advanced Engine')
                 .setBody('Chagua sehemu unayotaka kuona mifano (Samples) na kodi (Source Codes) zake:')
-                .setFooter('MICKEY BOT');
+                .setFooter('𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍');
 
             mainMenus.addReply('📁 Core: Buttons & Flow', '.source kundi_core');
             mainMenus.addReply('🚀 Advanced: Media Hacks', '.source kundi_advanced');
@@ -206,7 +206,7 @@ const sourceCommand = async (sock, chatId, msg, args) => {
                     `${i+1}. ${ex.title} (${ex.syntax})`
                 ).join('\n') +
                 `\n\n📌 Tuma .source nixell_[namba] kuona live sample + code`)
-            .setFooter('MICKEY BOT');
+            .setFooter('𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍');
 
         examples.slice(0, 5).forEach((ex, i) => {
             nixellMenu.addReply(`${i+1}. ${ex.title.substring(0, 20)}...`, `.source nixell_${i}`);
@@ -271,7 +271,7 @@ const sourceCommand = async (sock, chatId, msg, args) => {
         const coreMenu = new Button(sock)
             .setTitle('📁 Core Engine Features')
             .setBody('Maumbo ya msingi ya messageBuilder yako:')
-            .setFooter('MICKEY BOT');
+            .setFooter('𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍');
 
         coreMenu.addReply('📟 Button V2 (Quick Reply)', '.source test_v2');
         coreMenu.addReply('🔄 Carousel (Slide Cards)', '.source test_carousel');
@@ -288,7 +288,7 @@ const sourceCommand = async (sock, chatId, msg, args) => {
         const advMenu = new Button(sock)
             .setTitle('🚀 Advanced & Other Hacks')
             .setBody('Mbinu mpya zinazoonyesha Sample na kodi zake:')
-            .setFooter('MICKEY BOT');
+            .setFooter('𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍');
 
         advMenu.addReply('🎞️ Paired Media (Split Message)', '.source test_paired');
         advMenu.addReply('🔄 Animated Link Loop (Edit Key)', '.source test_linkloop');

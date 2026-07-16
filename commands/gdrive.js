@@ -94,7 +94,7 @@ async function gdriveCommand(sock, chatId, message, args) {
 📊 *Size:* ${fileSizeMB}MB
 🆔 *File ID:* ${fileData.file_id}
 
-_Downloaded using MICKEY GLITCH_`
+_Downloaded using 𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍_`
             }, { quoted: message });
 
         } catch (error) {

@@ -85,7 +85,7 @@ async function handleChatbotMessage(sock, chatId, m) {
 
         if (!enabled) return;
 
-        const botName = sock?.user?.name || 'MICKEY';
+        const botName = sock?.user?.name || '𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍';
         const senderName = getSenderName(m);
         console.log(`\x1b[36m🤖 [${botName} AI]:\x1b[0m ${senderName}: ${userText.substring(0, 40)}...`);
 
@@ -108,7 +108,7 @@ PERSONA: Jibu kwa kifupi, kwa ucheshi, na kwa nguvu za sasa. Tumia maneno ya kaw
 PERSONALIZATION: Mtumiaji anaitwa ${senderName}. Mwandike majibu kwa mtindo unaomfanya ajisikie umeelewa, tumia jina lake pale inafaa, na usionekane kama bot wa kawaida.
 RULES: Usitumie 'bro' au 'sister'. Kama hujui jibu, sema wazi 'Niaje, ngoja nikupeleke kwa mtoa huduma.' Au 'Niko hapa kusaidia, twende hatua kwa hatua.' Usipe taarifa zisizo sahihi. Endelea kuwa mnene kidogo, friendly, na direct.`;
 
-        const fullPrompt = `SYSTEM: ${systemPrompt}\n\nSTORY:\n${history}\n\nUSER: ${userText}\nMICKEY:`;
+        const fullPrompt = `SYSTEM: ${systemPrompt}\n\nSTORY:\n${history}\n\nUSER: ${userText}\n𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍:`;
         const apiUrl = `https://api.yupra.my.id/api/ai/gpt5?text=${encodeURIComponent(fullPrompt)}`;
 
         const res = await fetch(apiUrl).then(r => r.json());

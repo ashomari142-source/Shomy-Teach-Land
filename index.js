@@ -1,5 +1,5 @@
 /**
- * MICKEY GLITCH - A WhatsApp Bot
+ * 𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 - A WhatsApp Bot
  * CUSTOM PAIRING - Uses Custom 8-digit code (MICKDADY)
  * MODERNISED CONSOLE UI & GITHUB IMAGE CONNECTION
  * 
@@ -913,7 +913,7 @@ function startKeepAlive() {
 // MANUAL SESSION MANAGEMENT COMMANDS
 // ────────────────────────────────────────────────
 async function showHelp() {
-    console.log(chalk.cyan.bold('\n  📖 MICKEY GLITCH - COMMANDS'));
+    console.log(chalk.cyan.bold('\n  📖 𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 - COMMANDS'));
     console.log(chalk.dim('  ─'.repeat(40)));
     console.log(chalk.white('  --clear-session, -c     Clear WhatsApp session'));
     console.log(chalk.white('  --help, -h              Show this help'));
@@ -942,7 +942,7 @@ async function initializeBot() {
     }
     
     if (process.argv.includes('--version') || process.argv.includes('-v')) {
-        console.log(chalk.green('MICKEY GLITCH v4.0 - Session Persistence Edition'));
+        console.log(chalk.green('𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 v4.0 - Session Persistence Edition'));
         process.exit(0);
     }
 

@@ -10,7 +10,7 @@ const CONFIG = {
     FOOTER: '🪐 𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍  • 𝟸𝟶𝟸𝟼 🪐',
     REPO_URL: 'https://github.com/Mickeydeveloper/Mickey-Glitch',
     // Picha mpya uliyotuma (iliyowekwa raw=true ili ipatikane kama picha ya ukweli)
-    BANNER: 'https://n.uguu.se/nnSQSNZU.jpg',
+    BANNER: 'https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg',
     VERSION: '3.3.0',
     MODE: 'PUBLIC'
 };

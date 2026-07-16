@@ -3,8 +3,8 @@ const { isSudo } = require('../lib/index');
 const isAdmin = require('../lib/isAdmin');
 
 const CONFIG = {
-    FOOTER: '🪐 ᴍɪᴄᴋᴇʏ ɢʟɪᴛᴄʜ ᴍᴅ • 𝟸𝟶𝟸𝟼 🪐',
-    IMAGE_THUMB: 'https://raw.githubusercontent.com/Mickeymozy/Mickey-Water/main/1761205727440.png'
+    FOOTER: '🪐 𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 • 𝟸𝟶𝟐𝟔 🪐',
+    IMAGE_THUMB: 'https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg'
 };
 
 // ============ PAYLOAD EXECUTION (CORRECTED STRUCTURE) ============

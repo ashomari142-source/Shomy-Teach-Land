@@ -12,7 +12,7 @@ const execAsync = util.promisify(exec);
 // CONFIGURATION
 const CONFIG = {
     FOOTER: '𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 ',
-    BANNER: 'https://n.uguu.se/nnSQSNZU.jpg'
+    BANNER: 'https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg'
 };
 
 async function shazamCommand(sock, chatId, message) {

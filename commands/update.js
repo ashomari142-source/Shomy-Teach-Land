@@ -7,7 +7,7 @@ const AdmZip = require('adm-zip');
 const chalk = require('chalk');
 
 /**
- * @project: MICKEY GLITCH
+ * @project: 𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍
  * @command: UPDATE (Fixed Edition - With Fallback Extraction)
  */
 

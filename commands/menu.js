@@ -1,5 +1,5 @@
 /**
- * @project: MICKEY GLITCH V3.0.5
+ * @project: 𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 V3.0.5
  * @author: Quantum Base Developer (TZ)
  * @version: 3.0.5
  */
@@ -185,7 +185,7 @@ const menuCommand = async (sock, chatId, m, userDb = null) => {
         // ==============================================
         const menuText = `
 ╔═══════════════════════════╗
-║  ✨ *MICKEY GLITCH BOT* ✨  ║
+║  ✨ *𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍* ✨  ║
 ╚═══════════════════════════╝
 
 ${greeting.emoji} *Habari za ${greeting.text}* ${userName}!
@@ -200,7 +200,7 @@ ${greeting.emoji} *Habari za ${greeting.text}* ${userName}!
 
 👇 *Bonyeza vitufe vilivyo hapa chini:*
 
-❤️ *All* | 🚀 *Powered by Mickey Developer*`;
+❤️ *All* | 🚀 *Powered by 𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍*`;
 
         // ==============================================
         // 📤 SEND INTERACTIVE MENU - BUTTON ZIMEBORESHA
@@ -208,7 +208,7 @@ ${greeting.emoji} *Habari za ${greeting.text}* ${userName}!
         const buttonV2 = new ButtonV2(sock)
             .setBody(menuText)
             .setFooter(buildFooter())
-            .setThumbnail('https://n.uguu.se/nnSQSNZU.jpg');
+            .setThumbnail('https://github.com/Mickeymozy/Shomy-Teach-Land-/blob/main/OMMY.jpg');
 
         // 🔘 BUTTON 1: Menu List - IMEBORESHA
         buttonV2.addRawButton({
@@ -275,7 +275,7 @@ ${greeting.emoji} *Habari za ${greeting.text}* ${userName}!
             const stats = getSystemStats();
             const fallbackText = `
 ╔═══════════════════════════╗
-║  ✨ *MICKEY GLITCH BOT* ✨  ║
+║  ✨ *𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍* ✨  ║
 ╚═══════════════════════════╝
 
 📊 *System Stats:*

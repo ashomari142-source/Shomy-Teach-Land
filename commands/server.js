@@ -1,5 +1,5 @@
 /**
- * @project: MICKEY GLITCH V3.0.5 - SERVER HANDLER
+ * @project: 𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 V3.0.5 - SERVER HANDLER
  * @author: Quantum Base Developer (TZ)
  */
 
@@ -77,7 +77,7 @@ module.exports = async (sock, m, chatUpdate) => {
                                          `👤 *Jina:* ${jina}\n` +
                                          `📞 *Simu:* ${simu}\n` +
                                          `⚙️ *Matumizi:* ${sababu}\n\n` +
-                                         `Asante kwa kujaza fomu yako ya *Mickey Glitch v3.0.5*! 🚀`;
+                                         `Asante kwa kujaza fomu yako ya *𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 v3.0.5*! 🚀`;
 
                     await sock.sendMessage(chatId, { text: responseText }, { quoted: msg });
                     return; // Inazuia bot isiendelee kutafuta kama ni command ya kawaida
@@ -105,7 +105,7 @@ module.exports = async (sock, m, chatUpdate) => {
             
             // Mfano wa command ya owner
             else if (command === 'owner') {
-                await sock.sendMessage(chatId, { text: `👑 *Mickey Glitch Owner:* t.me/QuantumBase` }, { quoted: msg });
+                await sock.sendMessage(chatId, { text: `👑 *𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 Owner:* t.me/QuantumBase` }, { quoted: msg });
             }
             // Booking confirmation pattern using new Button() builder
             else if (command === 'booking') {
