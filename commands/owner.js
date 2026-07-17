@@ -8,15 +8,13 @@ const path = require('path');
 // 👑 OWNER INFO CONFIG
 // ==============================================
 const CONFIG = {
-    FOOTER: '⭐ SHOMY TEACH LAND ⭐',
+    FOOTER: '👑 SHOMY TEACH • PROFILE 👑',
     OWNER: {
-        NAME: 'Shommy',
+        NAME: 'Shomy Teach',
         TITLE: 'Base Developer',
         LOCATION: 'Tanzania 🇹🇿',
-        PHONE_1: '0615944741',
-        PHONE_2: '0612130873',
-        INSTAGRAM: '@mickdady_official',
-        GITHUB: 'Mickeymozy'
+        PHONE_1: '255790991272',
+        PHONE_2: '255612130873'
     },
     // ✅ Picha ya LOCAL (Root directory)
     IMAGE_PATH: path.join(process.cwd(), 'OMMY.jpg')
@@ -26,32 +24,21 @@ const CONFIG = {
  * Main owner command handler
  */
 const ownerCommand = async (sock, chatId, message) => {
+    // Linda isisababishe crash kama message iko undefined
     const safeMessage = message || {};
     const messageKey = safeMessage.key || {};
-
-    console.log('[owner] invoked for', chatId);
+    
+    console.log('[owner] invoked for', chatId, 'from', messageKey.participant || messageKey.remoteJid || 'Unknown');
 
     try {
-        // ✅ Muonekano kama kwenye picha yako
-        const statusMessage = `╔═══════════════════════════════╗
-║     👑 *OWNER INFO* 👑        ║
-╚═══════════════════════════════╝
+        // ✅ Muonekano kama wa awali lakini umeboreshwa
+        const statusMessage = `🤖 *— OWNER INFO*\n\n` +
+            `👤 *Jina:* ${CONFIG.OWNER.NAME}\n` +
+            `💼 *Cheo:* ${CONFIG.OWNER.TITLE}\n` +
+            `📍 *Mahali:* ${CONFIG.OWNER.LOCATION}\n\n` +
+            `_Shomy Teach Technology™_`;
 
-👤 *Jina:* ${CONFIG.OWNER.NAME}
-💼 *Cheo:* ${CONFIG.OWNER.TITLE}
-📍 *Mahali:* ${CONFIG.OWNER.LOCATION}
-📱 *Namba 1:* ${CONFIG.OWNER.PHONE_1}
-📱 *Namba 2:* ${CONFIG.OWNER.PHONE_2}
-
-╔═══════════════════════════════╗
-║   📞 *CONTACT OPTIONS*        ║
-╚═══════════════════════════════╝
-
-👇 *Bonyeza vitufe vilivyo hapa chini:*
-
-❤️ *Mickey Glitch Technology™*`;
-
-        // ✅ Buttons (2 tu kama kwenye picha)
+        // ✅ Buttons (2 tu)
         const nativeButtons = [
             { 
                 buttonId: `phone:${CONFIG.OWNER.PHONE_1}`, 
@@ -85,25 +72,24 @@ const ownerCommand = async (sock, chatId, message) => {
             }
         };
 
-        // ✅ Function ya kupunguza picha
+        const fetchBuffer = async (url) => {
+            const res = await axios.get(url, { responseType: 'arraybuffer', timeout: 10000 });
+            return Buffer.from(res.data);
+        };
+
         async function resizeImg(buffer, width = 300, height = 300) {
             try {
                 const sharp = require('sharp');
-                return await sharp(buffer)
-                    .resize(width, height, { fit: 'cover' })
-                    .jpeg({ quality: 85 })
-                    .toBuffer();
-            } catch (e) {
-                console.error('[owner] Resize failed:', e.message);
+                return await sharp(buffer).resize(width, height, { fit: 'cover' }).toBuffer();
+            } catch {
                 return buffer;
             }
         }
 
-        // ✅ Send message with image
         const sendNativeButtonV2 = async () => {
             let thumbnailBuffer = null;
 
-            // ✅ Jaribu kupakia picha LOCAL
+            // ✅ Kwanza jaribu picha LOCAL
             const localImage = getLocalImage();
             if (localImage) {
                 try {
@@ -114,16 +100,12 @@ const ownerCommand = async (sock, chatId, message) => {
                 }
             }
 
-            // ✅ Kama hakuna picha local, jaribu online backup
+            // ✅ Kama hakuna local, jaribu online backup
             if (!thumbnailBuffer) {
                 try {
                     console.log('[owner] Trying online backup...');
                     const onlineUrl = 'https://raw.githubusercontent.com/Mickeymozy/Shomy-Teach-Land-/main/OMMY.jpg';
-                    const res = await axios.get(onlineUrl, { 
-                        responseType: 'arraybuffer', 
-                        timeout: 10000 
-                    });
-                    const buf = Buffer.from(res.data);
+                    const buf = await fetchBuffer(onlineUrl);
                     thumbnailBuffer = await resizeImg(buf, 300, 300);
                     console.log('[owner] Online image loaded');
                 } catch (e) {
@@ -133,21 +115,20 @@ const ownerCommand = async (sock, chatId, message) => {
 
             const contextInfo = {
                 forwardingScore: 999,
-                isForwarded: true
+                isForwarded: true,
             };
-
             const mentionJid = messageKey.participant || messageKey.remoteJid;
             if (mentionJid) contextInfo.mentionedJid = [mentionJid];
 
-            // ✅ Generate message
+            // ✅ Muundo wa buttonsMessage na locationMessage
             const msg = generateWAMessageFromContent(chatId, {
                 buttonsMessage: {
                     contentText: statusMessage,
                     footerText: CONFIG.FOOTER,
                     headerType: 6,
                     locationMessage: {
-                        degreesLatitude: -6.7924,
-                        degreesLongitude: 39.2083,
+                        degreesLatitude: 0,
+                        degreesLongitude: 0,
                         name: CONFIG.OWNER.NAME,
                         address: CONFIG.OWNER.TITLE,
                         jpegThumbnail: thumbnailBuffer
@@ -156,12 +137,9 @@ const ownerCommand = async (sock, chatId, message) => {
                     contextInfo,
                     buttons: nativeButtons
                 }
-            }, { 
-                userJid: (sock && sock.user && sock.user.id) || '', 
-                quoted: message || undefined 
-            });
+            }, { userJid: (sock && sock.user && sock.user.id) || '', quoted: message || undefined });
 
-            // ✅ Send
+            // ✅ Kutuma kwa relayMessage
             await sock.relayMessage(chatId, msg.message, {
                 messageId: msg.key?.id || sock.generateMessageID(),
                 additionalNodes: [
@@ -188,26 +166,21 @@ const ownerCommand = async (sock, chatId, message) => {
         try {
             await sendNativeButtonV2();
         } catch (e) {
-            console.error('[owner] Send failed:', e.message);
-            // ✅ Fallback: Tuma text tu
-            await sock.sendMessage(chatId, { 
-                text: statusMessage,
-                contextInfo: {
-                    isForwarded: true,
-                    forwardingScore: 999
-                }
-            }, { quoted: message });
+            console.error('[owner] sendNativeButtonV2 failed:', e && e.message ? e.message : e);
+            try {
+                await sock.sendMessage(chatId, { text: statusMessage }, { quoted: message });
+            } catch (ee) {
+                console.error('[owner] fallback send failed', ee && ee.message ? ee.message : ee);
+            }
         }
 
     } catch (error) {
-        console.error('Owner Error:', error);
+        console.error('Critical Error in Owner Command:', error);
         try {
             await sock.sendMessage(chatId, { 
-                text: '❌ *Error!* Tafadhali jaribu tena.' 
+                text: '❌ *System Error:* Kushindwa kupakia wasifu.\n```' + error.message + '```' 
             }, { quoted: message });
-        } catch (e) { 
-            console.error('Final error:', e);
-        }
+        } catch (e) { }
     }
 };
 
