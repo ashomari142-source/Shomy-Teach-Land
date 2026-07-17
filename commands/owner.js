@@ -10,14 +10,16 @@ const path = require('path');
 const CONFIG = {
     FOOTER: '⭐ SHOMY TEACH LAND ⭐',
     OWNER: {
-        NAME: 'Shomy Teach',
-        TITLE: 'Developer',
+        NAME: 'Shommy',
+        TITLE: 'Base Developer',
         LOCATION: 'Tanzania 🇹🇿',
-        PHONE: '255790991272',
-        INSTAGRAM: '@shomyteach',
-        GITHUB: 'ShomyTeach'
+        PHONE_1: '0615944741',
+        PHONE_2: '0612130873',
+        INSTAGRAM: '@mickdady_official',
+        GITHUB: 'Mickeymozy'
     },
-    IMAGE: 'https://raw.githubusercontent.com/Mickeymozy/Shomy-Teach-Land-/main/OMMY.jpg'
+    // ✅ Picha ya LOCAL (Root directory)
+    IMAGE_PATH: path.join(process.cwd(), 'OMMY.jpg')
 };
 
 /**
@@ -30,62 +32,55 @@ const ownerCommand = async (sock, chatId, message) => {
     console.log('[owner] invoked for', chatId);
 
     try {
-        const ownerImage = CONFIG.IMAGE;
+        // ✅ Muonekano kama kwenye picha yako
+        const statusMessage = `╔═══════════════════════════════╗
+║     👑 *OWNER INFO* 👑        ║
+╚═══════════════════════════════╝
 
-        // ✅ Muonekano Mfupi na Mzuri
-        const statusMessage = `╔══════════════════════╗
-║  👑 *OWNER* 👑   ║
-╚══════════════════════╝
+👤 *Jina:* ${CONFIG.OWNER.NAME}
+💼 *Cheo:* ${CONFIG.OWNER.TITLE}
+📍 *Mahali:* ${CONFIG.OWNER.LOCATION}
+📱 *Namba 1:* ${CONFIG.OWNER.PHONE_1}
+📱 *Namba 2:* ${CONFIG.OWNER.PHONE_2}
 
-👤 ${CONFIG.OWNER.NAME}
-💼 ${CONFIG.OWNER.TITLE}
-📍 ${CONFIG.OWNER.LOCATION}
-📱 ${CONFIG.OWNER.PHONE}
-📸 ${CONFIG.OWNER.INSTAGRAM}
-💻 ${CONFIG.OWNER.GITHUB}
+╔═══════════════════════════════╗
+║   📞 *CONTACT OPTIONS*        ║
+╚═══════════════════════════════╝
 
-╔══════════════════════╗
-║  📞 *CONTACT*  ║
-╚══════════════════════╝
+👇 *Bonyeza vitufe vilivyo hapa chini:*
 
-👇 *Bonyeza chini:*
+❤️ *Mickey Glitch Technology™*`;
 
-❤️ *Shomy Teach Land*`;
-
-        // ✅ Buttons (3 tu)
+        // ✅ Buttons (2 tu kama kwenye picha)
         const nativeButtons = [
             { 
-                buttonId: `phone:${CONFIG.OWNER.PHONE}`, 
-                buttonText: { displayText: `📞 Call` }, 
+                buttonId: `phone:${CONFIG.OWNER.PHONE_1}`, 
+                buttonText: { displayText: `📞 Call Line 1 (${CONFIG.OWNER.PHONE_1})` }, 
                 type: 1 
             },
             { 
-                buttonId: `.menu`, 
-                buttonText: { displayText: `📂 Menu` }, 
-                type: 1 
-            },
-            { 
-                buttonId: `.alive`, 
-                buttonText: { displayText: `✨ Alive` }, 
+                buttonId: `phone:${CONFIG.OWNER.PHONE_2}`, 
+                buttonText: { displayText: `📞 Call Line 2 (${CONFIG.OWNER.PHONE_2})` }, 
                 type: 1 
             }
         ];
 
-        // ✅ Function ya kupakia picha
-        const fetchBuffer = async (url) => {
+        // ✅ Function ya kupakia picha LOCAL
+        const getLocalImage = () => {
             try {
-                console.log('[owner] Downloading image...');
-                const res = await axios.get(url, { 
-                    responseType: 'arraybuffer', 
-                    timeout: 30000,
-                    headers: {
-                        'User-Agent': 'Mozilla/5.0'
-                    }
-                });
-                console.log('[owner] Image downloaded, size:', res.data.length);
-                return Buffer.from(res.data);
+                const imagePath = CONFIG.IMAGE_PATH;
+                console.log('[owner] Looking for image at:', imagePath);
+                
+                if (fs.existsSync(imagePath)) {
+                    const imageBuffer = fs.readFileSync(imagePath);
+                    console.log('[owner] Local image found, size:', imageBuffer.length);
+                    return imageBuffer;
+                } else {
+                    console.log('[owner] Local image NOT found at:', imagePath);
+                    return null;
+                }
             } catch (e) {
-                console.error('[owner] Download failed:', e.message);
+                console.error('[owner] Error reading local image:', e.message);
                 return null;
             }
         };
@@ -96,7 +91,7 @@ const ownerCommand = async (sock, chatId, message) => {
                 const sharp = require('sharp');
                 return await sharp(buffer)
                     .resize(width, height, { fit: 'cover' })
-                    .jpeg({ quality: 80 })
+                    .jpeg({ quality: 85 })
                     .toBuffer();
             } catch (e) {
                 console.error('[owner] Resize failed:', e.message);
@@ -108,30 +103,31 @@ const ownerCommand = async (sock, chatId, message) => {
         const sendNativeButtonV2 = async () => {
             let thumbnailBuffer = null;
 
-            // Jaribu kupakia picha
-            if (ownerImage) {
+            // ✅ Jaribu kupakia picha LOCAL
+            const localImage = getLocalImage();
+            if (localImage) {
                 try {
-                    const buf = await fetchBuffer(ownerImage);
-                    if (buf) {
-                        thumbnailBuffer = await resizeImg(buf, 300, 300);
-                        console.log('[owner] Image ready, size:', thumbnailBuffer.length);
-                    }
+                    thumbnailBuffer = await resizeImg(localImage, 300, 300);
+                    console.log('[owner] Local image ready, size:', thumbnailBuffer.length);
                 } catch (e) {
-                    console.error('[owner] Image error:', e.message);
+                    console.error('[owner] Failed to process local image:', e.message);
                 }
             }
 
-            // Ikiwa picha haijapakua, tumia local image au icon
+            // ✅ Kama hakuna picha local, jaribu online backup
             if (!thumbnailBuffer) {
                 try {
-                    // Jaribu kutumia local image ikiwa ipo
-                    const localPath = path.join(__dirname, '../media/owner.jpg');
-                    if (fs.existsSync(localPath)) {
-                        thumbnailBuffer = fs.readFileSync(localPath);
-                        console.log('[owner] Using local image');
-                    }
+                    console.log('[owner] Trying online backup...');
+                    const onlineUrl = 'https://raw.githubusercontent.com/Mickeymozy/Shomy-Teach-Land-/main/OMMY.jpg';
+                    const res = await axios.get(onlineUrl, { 
+                        responseType: 'arraybuffer', 
+                        timeout: 10000 
+                    });
+                    const buf = Buffer.from(res.data);
+                    thumbnailBuffer = await resizeImg(buf, 300, 300);
+                    console.log('[owner] Online image loaded');
                 } catch (e) {
-                    console.log('[owner] No local image found');
+                    console.error('[owner] Online backup failed:', e.message);
                 }
             }
 
@@ -143,7 +139,7 @@ const ownerCommand = async (sock, chatId, message) => {
             const mentionJid = messageKey.participant || messageKey.remoteJid;
             if (mentionJid) contextInfo.mentionedJid = [mentionJid];
 
-            // Generate message
+            // ✅ Generate message
             const msg = generateWAMessageFromContent(chatId, {
                 buttonsMessage: {
                     contentText: statusMessage,
@@ -165,7 +161,7 @@ const ownerCommand = async (sock, chatId, message) => {
                 quoted: message || undefined 
             });
 
-            // Send
+            // ✅ Send
             await sock.relayMessage(chatId, msg.message, {
                 messageId: msg.key?.id || sock.generateMessageID(),
                 additionalNodes: [
@@ -193,7 +189,7 @@ const ownerCommand = async (sock, chatId, message) => {
             await sendNativeButtonV2();
         } catch (e) {
             console.error('[owner] Send failed:', e.message);
-            // Fallback: Tuma text tu
+            // ✅ Fallback: Tuma text tu
             await sock.sendMessage(chatId, { 
                 text: statusMessage,
                 contextInfo: {
