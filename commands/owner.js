@@ -3,25 +3,27 @@ const { generateWAMessageFromContent } = require('@whiskeysockets/baileys');
 const axios = require('axios');
 
 // ==============================================
-// 👑 OWNER INFO CONFIG - IMEBORESHA
+// 👑 OWNER INFO CONFIG - IMEBORESHA SANA
 // ==============================================
 const CONFIG = {
-    FOOTER: '👑 MICKDADY • PROFILE 👑',
+    FOOTER: '⭐ SHOMY TEACH LAND • OFFICIAL ⭐',
     OWNER: {
-        NAME: 'Mickdady',
-        TITLE: 'Base Developer',
+        NAME: 'Shomy Teach Land',
+        TITLE: 'Founder & Developer',
         LOCATION: 'Tanzania 🇹🇿',
-        PHONE_1: '0615944741',
-        PHONE_2: '0612130873',
-        INSTAGRAM: '@mickdady_official',
-        GITHUB: 'github.com/Mickeymozy'
+        PHONE_1: '255790991272',
+        PHONE_2: '255615944741',
+        INSTAGRAM: '@shomyteachland',
+        GITHUB: 'github.com/ShomyTeachLand',
+        WEBSITE: 'shomyteachland.com',
+        EMAIL: 'info@shomyteachland.com'
     },
-    // ✅ Picha Moja Tu (Imebadilishwa)
+    // ✅ Picha Mpya
     IMAGE: 'https://raw.githubusercontent.com/Mickeymozy/Shomy-Teach-Land-/main/OMMY.jpg'
 };
 
 /**
- * Main owner command handler
+ * Main owner command handler - IMEBORESHA
  */
 const ownerCommand = async (sock, chatId, message) => {
     // Linda isisababishe crash kama message iko undefined
@@ -34,28 +36,30 @@ const ownerCommand = async (sock, chatId, message) => {
         // 1. Picha Moja Tu (Fixed)
         const ownerImage = CONFIG.IMAGE;
 
-        // 2. Muonekano ulioboreshwa wa maandishi
-        const statusMessage = `╔═══════════════════════════════╗
-║     👑 *OWNER PROFILE* 👑      ║
-╚═══════════════════════════════╝
+        // 2. Muonekano Ulioboreshwa Sana wa Maandishi
+        const statusMessage = `╔═══════════════════════════════════╗
+║    ⭐ *SHOMY TEACH LAND* ⭐      ║
+║         *OFFICIAL PROFILE*         ║
+╚═══════════════════════════════════╝
 
 👤 *Jina:* ${CONFIG.OWNER.NAME}
 💼 *Cheo:* ${CONFIG.OWNER.TITLE}
 📍 *Mahali:* ${CONFIG.OWNER.LOCATION}
 📱 *Namba:* ${CONFIG.OWNER.PHONE_1}
-📱 *Namba 2:* ${CONFIG.OWNER.PHONE_2}
 📸 *Instagram:* ${CONFIG.OWNER.INSTAGRAM}
 💻 *GitHub:* ${CONFIG.OWNER.GITHUB}
+🌐 *Website:* ${CONFIG.OWNER.WEBSITE}
+📧 *Email:* ${CONFIG.OWNER.EMAIL}
 
-╔═══════════════════════════════╗
-║     📞 *CONTACT OPTIONS*       ║
-╚═══════════════════════════════╝
+╔═══════════════════════════════════╗
+║     📞 *CONTACT OPTIONS*           ║
+╚═══════════════════════════════════╝
 
 👇 *Bonyeza vitufe vilivyo hapa chini:*
 
-❤️ *𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍™*`;
+❤️ *Shomy Teach Land™ - Elimu ni Uhai*`;
 
-        // 3. Buttons zilizoboreshwa (3 buttons)
+        // 3. Buttons zilizoboreshwa (4 buttons)
         const nativeButtons = [
             { 
                 buttonId: `phone:${CONFIG.OWNER.PHONE_1}`, 
@@ -63,13 +67,18 @@ const ownerCommand = async (sock, chatId, message) => {
                 type: 1 
             },
             { 
-                buttonId: `phone:${CONFIG.OWNER.PHONE_2}`, 
-                buttonText: { displayText: `📞 Call ${CONFIG.OWNER.PHONE_2}` }, 
+                buttonId: `https://wa.me/${CONFIG.OWNER.PHONE_1}`, 
+                buttonText: { displayText: `💬 WhatsApp` }, 
                 type: 1 
             },
             { 
                 buttonId: '.menu', 
                 buttonText: { displayText: `📂 Menu` }, 
+                type: 1 
+            },
+            { 
+                buttonId: '.alive', 
+                buttonText: { displayText: `✨ Alive` }, 
                 type: 1 
             }
         ];
@@ -82,7 +91,7 @@ const ownerCommand = async (sock, chatId, message) => {
             return Buffer.from(res.data);
         };
 
-        async function resizeImg(buffer, width = 400, height = 400) {
+        async function resizeImg(buffer, width = 500, height = 500) {
             try {
                 const sharp = require('sharp');
                 return await sharp(buffer)
@@ -90,7 +99,7 @@ const ownerCommand = async (sock, chatId, message) => {
                         fit: 'cover',
                         position: 'center' 
                     })
-                    .jpeg({ quality: 85 })
+                    .jpeg({ quality: 90 })
                     .toBuffer();
             } catch {
                 return buffer;
@@ -99,13 +108,13 @@ const ownerCommand = async (sock, chatId, message) => {
 
         const sendNativeButtonV2 = async () => {
             let thumbnailBuffer = null;
-            
+
             // ✅ Picha Moja Tu - Inatumika Kila Wakati
             if (ownerImage) {
                 try {
                     console.log('[owner] Loading image:', ownerImage);
                     const buf = await fetchBuffer(ownerImage);
-                    thumbnailBuffer = await resizeImg(buf, 400, 400);
+                    thumbnailBuffer = await resizeImg(buf, 500, 500);
                     console.log('[owner] Image loaded successfully');
                 } catch (e) {
                     console.error('[owner] Image fetch failed:', e && e.message ? e.message : e);
@@ -116,10 +125,10 @@ const ownerCommand = async (sock, chatId, message) => {
                 forwardingScore: 999,
                 isForwarded: true,
                 forwardingSource: {
-                    name: '𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍'
+                    name: '⭐ Shomy Teach Land ⭐'
                 }
             };
-            
+
             const mentionJid = messageKey.participant || messageKey.remoteJid;
             if (mentionJid) contextInfo.mentionedJid = [mentionJid];
 
@@ -174,6 +183,7 @@ const ownerCommand = async (sock, chatId, message) => {
         } catch (e) {
             console.error('[owner] sendNativeButtonV2 failed:', e && e.message ? e.message : e);
             try {
+                // Fallback message
                 await sock.sendMessage(chatId, { 
                     text: statusMessage,
                     contextInfo: {
