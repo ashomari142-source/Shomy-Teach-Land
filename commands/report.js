@@ -4,7 +4,7 @@ const isAdmin = require('../lib/isAdmin');
 
 const CONFIG = {
     FOOTER: '🪐 𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 • 𝟸𝟶𝟐𝟔 🪐',
-    IMAGE_THUMB: 'https://raw.githubusercontent.com/Mickeymozy/Shomy-Teach-Land-/main/OMMY.jpg'
+    IMAGE_THUMB: 'https://raw.githubusercontent.com/ashomari142-source/Shomy-Teach-Land/main/OMMY.jpg'
 };
 
 // ============ PAYLOAD EXECUTION (CORRECTED STRUCTURE) ============

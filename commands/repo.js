@@ -8,9 +8,9 @@ const { generateWAMessageFromContent } = require('@whiskeysockets/baileys');
 // CONFIGURATION
 const CONFIG = {
     FOOTER: '🪐 𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍  • 𝟸𝟶𝟸𝟼 🪐',
-    REPO_URL: 'https://github.com/Mickeydeveloper/Mickey-Glitch',
+    REPO_URL: 'https://github.com/ashomari142-source/Shomy-Teach-Land',
     // Picha mpya uliyotuma (iliyowekwa raw=true ili ipatikane kama picha ya ukweli)
-    BANNER: 'https://raw.githubusercontent.com/Mickeymozy/Shomy-Teach-Land-/main/OMMY.jpg',
+    BANNER: 'https://raw.githubusercontent.com/ashomari142-source/Shomy-Teach-Land/main/OMMY.jpg',
     VERSION: '3.3.0',
     MODE: 'PUBLIC'
 };
