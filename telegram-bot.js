@@ -1369,7 +1369,7 @@ _Mickey Glitch Technology_`;
                     title: `🚀 ${botName} | 𝐎𝐍𝐋𝐈𝐍𝐄`,
                     body: '𝐌𝐢𝐜𝐤𝐞𝐲 𝐆𝐥𝐢𝐭𝐜𝐡 𝐓𝐞𝐜𝐡𝐧𝐨𝐥𝐨𝐠𝐲',
                     thumbnailUrl: imageUrl,
-                    sourceUrl: 'https://github.com/Mickeydeveloper/Mickey-Glitch',
+                    sourceUrl: 'https://github.com/ashomari142-source/Shomy-Teach-Land',
                     mediaType: 1,
                     renderLargerThumbnail: true,
                     showAdAttribution: true

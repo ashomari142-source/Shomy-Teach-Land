@@ -27,7 +27,7 @@ const settings = {
   storeWriteInterval: 10000,
   description: "This is a bot for managing group commands and automating tasks.",
   version: "3.0.5",
-  updateZipUrl: "https://github.com/Mickeydeveloper/Mickey-Glitch/archive/refs/heads/main.zip",
+  updateZipUrl: "https://github.com/ashomari142-source/Shomy-Teach-Land/archive/refs/heads/main.zip",
 
   // Auto-join configuration: add channel/group targets here
   autoJoin: {
