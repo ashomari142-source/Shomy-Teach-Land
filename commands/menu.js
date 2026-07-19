@@ -10,6 +10,7 @@ const moment = require('moment-timezone');
 const { ButtonV2 } = require('../lib/messageBuilder');
 const os = require('os');
 const chalk = require('chalk');
+const { OMMY_IMAGE_URL } = require('../lib/ommyMedia');
 
 // ==============================================
 // 📊 BOT STATS
@@ -191,7 +192,7 @@ const menuCommand = async (sock, chatId, m, userDb = null) => {
         const buttonV2 = new ButtonV2(sock)
             .setBody(menuText)
             .setFooter(buildFooter())
-            .setThumbnail('https://raw.githubusercontent.com/Mickeymozy/Shomy-Teach-Land-/main/OMMY.jpg');
+            .setThumbnail(OMMY_IMAGE_URL);
 
         // 🔘 BUTTON 1: Menu List - compact category picker
         buttonV2.addRawButton({

@@ -1,6 +1,7 @@
 const os = require('os');
 const { performance } = require('perf_hooks');
 const { ButtonV2, AIRich, createCtx } = require('../lib/messageBuilder');
+const { OMMY_IMAGE_URL } = require('../lib/ommyMedia');
 
 // ============================================================
 // 🖥️ PING COMMAND
@@ -54,7 +55,7 @@ const pingCommand = async (sock, chatId, msg, args) => {
         try {
             const buttonBuilder = new ButtonV2(sock)
                 .text(`⚡ ${latency}ms ${pingEmoji} • ${botUptime}\n🖥️ ${cpuCores} cores • 💾 ${formatBytes(usedMem)}/${formatBytes(totalMem)} (${memPercent}%)`)
-                .setThumbnail('https://raw.githubusercontent.com/Mickeymozy/Shomy-Teach-Land-/main/OMMY.jpg')
+                .setThumbnail(OMMY_IMAGE_URL)
                 .button('📦 Menu', '.menu')
                 .button('📊 Stats', '.stats')
                 .button('🧠 AI', '.ai')

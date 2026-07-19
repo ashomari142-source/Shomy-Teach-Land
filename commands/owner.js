@@ -3,6 +3,7 @@ const { generateWAMessageFromContent } = require('@whiskeysockets/baileys');
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
+const { OMMY_IMAGE_URL, OMMY_IMAGE_PATH, hasLocalOmmyImage } = require('../lib/ommyMedia');
 
 // ==============================================
 // 👑 OWNER INFO CONFIG
@@ -17,7 +18,7 @@ const CONFIG = {
         PHONE_2: '255612130873'
     },
     // ✅ Picha ya LOCAL (Root directory)
-    IMAGE_PATH: path.join(process.cwd(), 'OMMY.jpg')
+    IMAGE_PATH: OMMY_IMAGE_PATH
 };
 
 /**
@@ -58,7 +59,7 @@ const ownerCommand = async (sock, chatId, message) => {
                 const imagePath = CONFIG.IMAGE_PATH;
                 console.log('[owner] Looking for image at:', imagePath);
                 
-                if (fs.existsSync(imagePath)) {
+                if (hasLocalOmmyImage()) {
                     const imageBuffer = fs.readFileSync(imagePath);
                     console.log('[owner] Local image found, size:', imageBuffer.length);
                     return imageBuffer;
@@ -104,8 +105,7 @@ const ownerCommand = async (sock, chatId, message) => {
             if (!thumbnailBuffer) {
                 try {
                     console.log('[owner] Trying online backup...');
-                    const onlineUrl = 'https://raw.githubusercontent.com/Mickeymozy/Shomy-Teach-Land-/main/OMMY.jpg';
-                    const buf = await fetchBuffer(onlineUrl);
+                    const buf = await fetchBuffer(OMMY_IMAGE_URL);
                     thumbnailBuffer = await resizeImg(buf, 300, 300);
                     console.log('[owner] Online image loaded');
                 } catch (e) {
