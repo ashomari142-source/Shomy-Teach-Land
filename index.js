@@ -32,6 +32,8 @@ const { getButtonId, isButtonResponse, autoDetectButtonCommand, isCommandId } = 
 const store = require("./lib/lightweight_store");
 const settings = require("./settings");
 const MickeyHelper = require("./lib/Mickey");
+const SessionManager = require("./lib/sessionManager");
+const CredentialsManager = require("./lib/credentialsManager");
 
 // Try to load telegram module
 let startTelegramBot = null;
@@ -46,6 +48,12 @@ try {
 // LOGGER - SILENT FOR CLEAN CONSOLE
 // ────────────────────────────────────────────────
 const pinoLogger = pino({ level: 'silent' });
+
+// ────────────────────────────────────────────────
+// SESSION & CREDENTIALS MANAGERS - INITIALIZATION
+// ────────────────────────────────────────────────
+const sessionManager = new SessionManager();
+const credsManager = new CredentialsManager();
 
 // --- Global Settings ---
 const _botName = settings.botName || settings.botname || "𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 ™";
@@ -654,6 +662,9 @@ async function startMickeyBot() {
                 isReconnecting = false;
                 errorRecovery.resetCounters();
                 botStartTime = Date.now();
+
+                // Record health check - session is healthy
+                sessionManager.recordHealthCheck('healthy');
 
                 console.log('\n' + chalk.bgGreen.black.bold("  🚀 CORE ONLINE  ") + chalk.greenBright(" System successfully synchronized with WhatsApp matrix.\n"));
 
