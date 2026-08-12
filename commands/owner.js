@@ -5,123 +5,180 @@ const fs = require('fs');
 const path = require('path');
 const { OMMY_IMAGE_URL, OMMY_IMAGE_PATH, hasLocalOmmyImage } = require('../lib/ommyMedia');
 
-// ==============================================
-// 👑 OWNER INFO CONFIG
-// ==============================================
+// ═══════════════════════════════════════════════════════════════
+// 👑 OWNER PROFILE COMMAND - SHOMY TEACH CONFIGURATION
+// ═══════════════════════════════════════════════════════════════
+
 const CONFIG = {
-    FOOTER: '👑 SHOMY TEACH • PROFILE 👑',
+    FOOTER: '👑 SHOMY TEACH • OWNER PROFILE 👑',
     OWNER: {
         NAME: 'Shomy Teach',
-        TITLE: 'Base Developer',
+        TITLE: 'Base Developer & Bot Creator',
         LOCATION: 'Tanzania 🇹🇿',
         PHONE_1: '255790991272',
-        PHONE_2: '255612130873'
+        PHONE_2: '255612130873',
+        STATUS: '🟢 Active Developer'
     },
-    // ✅ Picha ya LOCAL (Root directory)
     IMAGE_PATH: OMMY_IMAGE_PATH
 };
 
 /**
  * Main owner command handler
+ * Displays owner profile with contact information and profile image
  */
 const ownerCommand = async (sock, chatId, message) => {
-    // Linda isisababishe crash kama message iko undefined
     const safeMessage = message || {};
     const messageKey = safeMessage.key || {};
     
-    console.log('[owner] invoked for', chatId, 'from', messageKey.participant || messageKey.remoteJid || 'Unknown');
+    console.log('[📋 Owner] Command invoked by:', messageKey.participant || messageKey.remoteJid || 'Unknown');
 
     try {
-        // ✅ Muonekano kama wa awali lakini umeboreshwa
-        const statusMessage = `🤖 *— OWNER INFO*\n\n` +
-            `👤 *Jina:* ${CONFIG.OWNER.NAME}\n` +
-            `💼 *Cheo:* ${CONFIG.OWNER.TITLE}\n` +
-            `📍 *Mahali:* ${CONFIG.OWNER.LOCATION}\n\n` +
-            `_Shomy Teach Technology™_`;
+        // ═══════════════════════════════════════════════════════════════
+        // STATUS MESSAGE - FORMATTED WITH EMOJIS AND STRUCTURE
+        // ═══════════════════════════════════════════════════════════════
+        const statusMessage = `
+╔═══════════════════════════════════════╗
+║  👑 *SHOMY TEACH - OWNER PROFILE* 👑  ║
+╚═══════════════════════════════════════╝
 
-        // ✅ Buttons (2 tu)
-        const nativeButtons = [
+╭────────────────────────────────────╮
+│ 👤 *PERSONAL INFORMATION*
+├────────────────────────────────────┤
+│ 📛 *Name:* ${CONFIG.OWNER.NAME}
+│ 💼 *Title:* ${CONFIG.OWNER.TITLE}
+│ 📍 *Location:* ${CONFIG.OWNER.LOCATION}
+│ 🟢 *Status:* ${CONFIG.OWNER.STATUS}
+╰────────────────────────────────────╯
+
+╭────────────────────────────────────╮
+│ 📱 *CONTACT METHODS*
+├────────────────────────────────────┤
+│ ☎️ Line 1: ${CONFIG.OWNER.PHONE_1}
+│ ☎️ Line 2: ${CONFIG.OWNER.PHONE_2}
+╰────────────────────────────────────╯
+
+✨ *_Shomy Teach Technology™_*
+`.trim();
+
+        // ═══════════════════════════════════════════════════════════════
+        // INTERACTIVE BUTTONS - CONTACT OPTIONS
+        // ═══════════════════════════════════════════════════════════════
+        const contactButtons = [
             { 
                 buttonId: `phone:${CONFIG.OWNER.PHONE_1}`, 
-                buttonText: { displayText: `📞 Call Line 1 (${CONFIG.OWNER.PHONE_1})` }, 
+                buttonText: { displayText: `☎️ Call Line 1` }, 
                 type: 1 
             },
             { 
                 buttonId: `phone:${CONFIG.OWNER.PHONE_2}`, 
-                buttonText: { displayText: `📞 Call Line 2 (${CONFIG.OWNER.PHONE_2})` }, 
+                buttonText: { displayText: `☎️ Call Line 2` }, 
                 type: 1 
             }
         ];
 
-        // ✅ Function ya kupakia picha LOCAL
+        // ═══════════════════════════════════════════════════════════════
+        // IMAGE HANDLING - LOCAL & REMOTE FALLBACK
+        // ═══════════════════════════════════════════════════════════════
+
+        /**
+         * Load profile image from local storage
+         * @returns {Buffer|null} Image buffer or null if not found
+         */
         const getLocalImage = () => {
             try {
                 const imagePath = CONFIG.IMAGE_PATH;
-                console.log('[owner] Looking for image at:', imagePath);
+                console.log('  📦 Checking local image at:', imagePath);
                 
                 if (hasLocalOmmyImage()) {
                     const imageBuffer = fs.readFileSync(imagePath);
-                    console.log('[owner] Local image found, size:', imageBuffer.length);
+                    console.log('  ✅ Local image found -', imageBuffer.length, 'bytes');
                     return imageBuffer;
                 } else {
-                    console.log('[owner] Local image NOT found at:', imagePath);
+                    console.log('  ⚠️  Local image not found at:', imagePath);
                     return null;
                 }
-            } catch (e) {
-                console.error('[owner] Error reading local image:', e.message);
+            } catch (error) {
+                console.error('  ❌ Error reading local image:', error.message);
                 return null;
             }
         };
 
-        const fetchBuffer = async (url) => {
-            const res = await axios.get(url, { responseType: 'arraybuffer', timeout: 10000 });
-            return Buffer.from(res.data);
+        /**
+         * Fetch image from remote URL
+         * @param {string} url - Remote image URL
+         * @returns {Promise<Buffer>} Image buffer
+         */
+        const fetchRemoteImage = async (url) => {
+            console.log('  🌐 Fetching from remote:', url);
+            const response = await axios.get(url, { 
+                responseType: 'arraybuffer', 
+                timeout: 10000 
+            });
+            return Buffer.from(response.data);
         };
 
-        async function resizeImg(buffer, width = 300, height = 300) {
+        /**
+         * Resize image to specified dimensions
+         * @param {Buffer} buffer - Image buffer
+         * @param {number} width - Target width
+         * @param {number} height - Target height
+         * @returns {Promise<Buffer>} Resized image buffer
+         */
+        const resizeImage = async (buffer, width = 300, height = 300) => {
             try {
                 const sharp = require('sharp');
-                return await sharp(buffer).resize(width, height, { fit: 'cover' }).toBuffer();
-            } catch {
+                console.log('  📐 Resizing image to', width, 'x', height);
+                return await sharp(buffer)
+                    .resize(width, height, { fit: 'cover' })
+                    .toBuffer();
+            } catch (error) {
+                console.warn('  ⚠️  Image resizing failed, using original:', error.message);
                 return buffer;
             }
-        }
+        };
 
-        const sendNativeButtonV2 = async () => {
-            let thumbnailBuffer = null;
+        // ═══════════════════════════════════════════════════════════════
+        // MESSAGE BUILDER - NATIVE BUTTON WITH IMAGE
+        // ═══════════════════════════════════════════════════════════════
+        const sendProfileMessage = async () => {
+            let profileImage = null;
 
-            // ✅ Kwanza jaribu picha LOCAL
+            // Step 1: Try to load local image first
+            console.log('\n  [Step 1] Loading profile image...');
             const localImage = getLocalImage();
             if (localImage) {
                 try {
-                    thumbnailBuffer = await resizeImg(localImage, 300, 300);
-                    console.log('[owner] Local image ready, size:', thumbnailBuffer.length);
-                } catch (e) {
-                    console.error('[owner] Failed to process local image:', e.message);
+                    profileImage = await resizeImage(localImage, 300, 300);
+                    console.log('  ✅ Profile image ready from local storage');
+                } catch (error) {
+                    console.error('  ❌ Failed to process local image:', error.message);
                 }
             }
 
-            // ✅ Kama hakuna local, jaribu online backup
-            if (!thumbnailBuffer) {
+            // Step 2: Fallback to remote image if local failed
+            if (!profileImage) {
                 try {
-                    console.log('[owner] Trying online backup...');
-                    const buf = await fetchBuffer(OMMY_IMAGE_URL);
-                    thumbnailBuffer = await resizeImg(buf, 300, 300);
-                    console.log('[owner] Online image loaded');
-                } catch (e) {
-                    console.error('[owner] Online backup failed:', e.message);
+                    console.log('  [Step 2] Attempting remote image fallback...');
+                    const remoteBuffer = await fetchRemoteImage(OMMY_IMAGE_URL);
+                    profileImage = await resizeImage(remoteBuffer, 300, 300);
+                    console.log('  ✅ Profile image loaded from remote source');
+                } catch (error) {
+                    console.warn('  ⚠️  Remote image fallback failed:', error.message);
                 }
             }
 
+            // Step 3: Prepare message context
             const contextInfo = {
                 forwardingScore: 999,
                 isForwarded: true,
             };
+            
             const mentionJid = messageKey.participant || messageKey.remoteJid;
             if (mentionJid) contextInfo.mentionedJid = [mentionJid];
 
-            // ✅ Muundo wa buttonsMessage na locationMessage
-            const msg = generateWAMessageFromContent(chatId, {
+            // Step 4: Build and send the message
+            console.log('  [Step 3] Building message structure...');
+            const messageContent = generateWAMessageFromContent(chatId, {
                 buttonsMessage: {
                     contentText: statusMessage,
                     footerText: CONFIG.FOOTER,
@@ -131,17 +188,17 @@ const ownerCommand = async (sock, chatId, message) => {
                         degreesLongitude: 0,
                         name: CONFIG.OWNER.NAME,
                         address: CONFIG.OWNER.TITLE,
-                        jpegThumbnail: thumbnailBuffer
+                        jpegThumbnail: profileImage
                     },
                     viewOnce: true,
                     contextInfo,
-                    buttons: nativeButtons
+                    buttons: contactButtons
                 }
             }, { userJid: (sock && sock.user && sock.user.id) || '', quoted: message || undefined });
 
-            // ✅ Kutuma kwa relayMessage
-            await sock.relayMessage(chatId, msg.message, {
-                messageId: msg.key?.id || sock.generateMessageID(),
+            console.log('  [Step 4] Sending message via relay...');
+            await sock.relayMessage(chatId, messageContent.message, {
+                messageId: messageContent.key?.id || sock.generateMessageID(),
                 additionalNodes: [
                     {
                         tag: 'biz',
@@ -161,26 +218,48 @@ const ownerCommand = async (sock, chatId, message) => {
                     }
                 ]
             });
+            console.log('  ✅ Profile message sent successfully\n');
         };
 
+        // ═══════════════════════════════════════════════════════════════
+        // EXECUTION - TRY PRIMARY, FALLBACK TO SIMPLE TEXT
+        // ═══════════════════════════════════════════════════════════════
         try {
-            await sendNativeButtonV2();
-        } catch (e) {
-            console.error('[owner] sendNativeButtonV2 failed:', e && e.message ? e.message : e);
+            console.log('📤 Attempting primary message send method...');
+            await sendProfileMessage();
+        } catch (primaryError) {
+            console.warn('⚠️  Primary method failed:', primaryError?.message || primaryError);
+            console.log('📤 Attempting fallback text message...');
+            
             try {
                 await sock.sendMessage(chatId, { text: statusMessage }, { quoted: message });
-            } catch (ee) {
-                console.error('[owner] fallback send failed', ee && ee.message ? ee.message : ee);
+                console.log('✅ Message sent via fallback method');
+            } catch (fallbackError) {
+                console.error('❌ All send methods failed');
+                console.error('   Primary error:', primaryError?.message);
+                console.error('   Fallback error:', fallbackError?.message);
             }
         }
 
     } catch (error) {
-        console.error('Critical Error in Owner Command:', error);
+        console.error('🔴 CRITICAL ERROR in Owner Command:', error?.message || error);
+        
         try {
-            await sock.sendMessage(chatId, { 
-                text: '❌ *System Error:* Kushindwa kupakia wasifu.\n```' + error.message + '```' 
-            }, { quoted: message });
-        } catch (e) { }
+            const errorMessage = `
+╭─────────────────────────────────╮
+│ ❌ *System Error*
+├─────────────────────────────────┤
+│ Failed to load owner profile
+│ Error: ${error?.message || 'Unknown error'}
+╰─────────────────────────────────╯
+
+Please try again later.
+`.trim();
+
+            await sock.sendMessage(chatId, { text: errorMessage }, { quoted: message });
+        } catch (sendError) {
+            console.error('❌ Could not send error message:', sendError?.message);
+        }
     }
 };
 
