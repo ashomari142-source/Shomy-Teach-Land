@@ -33,8 +33,7 @@ function loadMemory() {
         const data = JSON.parse(fs.readFileSync(MEMORY_PATH, 'utf8'));
         const now = Date.now();
         let changed = false;
-        
-        // Futa conversation_id za zamani baada ya dakika 30 zisipotumika
+
         for (const id in data) {
             if (data[id].lastUpdate && (now - data[id].lastUpdate > 1800000)) {
                 delete data[id];
@@ -73,6 +72,35 @@ function getSenderName(m) {
     return 'Mteja';
 }
 
+// --- HUMANIZE RESPONSE ---
+function humanizeResponse(text) {
+    if (!text) return text;
+    
+    // Fupisha majibu marefu sana
+    if (text.length > 800) {
+        text = text.substring(0, 800) + '...';
+    }
+    
+    // Ongeza misemo ya mtaani mara kwa mara
+    const shengPhrases = [
+        'bana', 'mzee', 'kipo', 'mambo', 'vipi', 'sawa', 
+        'poa', 'freshi', 'shwari', 'mzuka', 'boss', 'dah',
+        'eish', 'walahi', 'acha', 'kabisa', 'japo', 'hata',
+        'kumbe', 'vilevile', 'hiyo', 'ndiyo', 'sio', 'basi'
+    ];
+    
+    // Ongeza emoji mara kwa mara
+    const emojis = ['😄', '😂', '🔥', '💯', '🙌', '👊', '🤝', '✨', '💪', '😎'];
+    
+    // Kama jibu ni fupi, ongeza emoji
+    if (text.length < 100 && Math.random() > 0.6) {
+        const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+        text = text + ' ' + randomEmoji;
+    }
+    
+    return text;
+}
+
 // --- MAIN CHATBOT HANDLER ---
 async function handleChatbotMessage(sock, chatId, m) {
     try {
@@ -87,9 +115,9 @@ async function handleChatbotMessage(sock, chatId, m) {
 
         if (!enabled) return;
 
-        const botName = sock?.user?.name || '𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍';
+        const botName = 'Shomy Teach Land';
         const senderName = getSenderName(m);
-        console.log(`\x1b[36m🤖 [${botName} AI]:\x1b[0m ${senderName}: ${userText.substring(0, 40)}...`);
+        console.log(`\x1b[36m👤 [${botName}]:\x1b[0m ${senderName}: ${userText.substring(0, 40)}...`);
 
         try { await sock.sendPresenceUpdate('composing', chatId); } catch (e) {}
 
@@ -97,27 +125,61 @@ async function handleChatbotMessage(sock, chatId, m) {
         let memory = loadMemory();
         let conversationId = memory[chatId]?.conversation_id || '';
 
-        // Kuweka jina la sender kwenye ujumbe
-        const fullPrompt = `[Mtumiaji anaitwa: ${senderName}]. ${userText}`;
+        // ─── PROMPT KALI KAMA MWANADAMU WA SHOMY TEACH LAND ───
+        const fullPrompt = `Unajifanya kuwa Shomy Teach Land, mwanadamu halisi mwenye tabia za kipekee.
 
-        // Tumia Prexzy API mpya kuondoa EAI_AGAIN error
+TAARIFA ZAKO:
+• Jina: Shomy Teach Land
+• Umri: 26
+• Mji: Dar es Salaam, Tanzania
+• Kazi: Mwalimu na mjasiriamali
+• Tabia: Mcheshi sana, mkarimu, anapenda kucheka, ana staili ya mtaani
+• Anajulikana kwa: Kufundisha watu mambo mengi (Teach Land)
+
+STAYILI YA KUJIBU:
+• Anatumia lugha ya Kiswahili na Kiingereza iliyochanganywa (Sheng)
+• Anatumia misemo ya mtaani: "bana", "mzee", "kipo", "mambo", "vipi", "sawa", "poa", "freshi", "shwari", "mzuka"
+• Anajibu kama rafiki wa karibu, sio kama AI au roboti
+• Anapenda kutoa ushauri na kufundisha watu
+• Majibu yake ni mafupi, ya moja kwa moja, na ya kufurahisha
+• Anatumia vitenzi vya mtaani na misemo ya kawaida
+
+Sasa wewe ni Shomy Teach Land, mwanadamu halisi. Mteja aliyezungumza nawe ni ${senderName}. Ujumbe wake ni: "${userText}"
+
+Jibu kwa staili yako ya kawaida kama binadamu wa mtaani - fupi, rahisi, na kwa tabia yako ya kufundisha na kuchekesha.`;
+
+        // Tumia Prexzy API
         let apiUrl = `https://prexzyapis.com/ai/chatbot?text=${encodeURIComponent(fullPrompt)}`;
         if (conversationId) {
             apiUrl += `&conversation_id=${encodeURIComponent(conversationId)}`;
         }
 
         const res = await fetch(apiUrl, { timeout: 15000 }).then(r => r.json()).catch(() => null);
-        
-        const reply = res?.data?.response;
+
+        let reply = res?.data?.response;
         const newConversationId = res?.data?.conversation_id;
 
-        if (!reply) return;
+        // Kama hakuna jibu, tumia default reply
+        if (!reply) {
+            const defaultReplies = [
+                "Mambo vipi bana! Samahani nimekosa kidogo, unaweza kurudia? 😄",
+                "Eish mzee, sikusikia vizuri. Rudia tena tafadhali! 💪",
+                "Poa sana! Lakini sijaelewa vizuri, unaweza kueleza zaidi? 🙌",
+                "Shwari mzee! Niko hapa, sema tena nikusikie vizuri. 👊"
+            ];
+            reply = defaultReplies[Math.floor(Math.random() * defaultReplies.length)];
+        }
+
+        // Humanize reply
+        reply = humanizeResponse(reply);
 
         // Hifadhi conversation_id mpya
         if (newConversationId) {
             memory[chatId] = {
                 conversation_id: newConversationId,
-                lastUpdate: Date.now()
+                lastUpdate: Date.now(),
+                lastMessage: userText,
+                lastReply: reply
             };
             saveMemory(memory);
         }
@@ -157,17 +219,44 @@ async function groupChatbotToggleCommand(sock, chatId, m, body) {
 
         if (args.length === 0) {
             return await sock.sendMessage(chatId, { 
-                text: '💡 *MATUMIZI:* \n.chatbot on/off\n.chatbot private on/off' 
+                text: `💡 *MATUMIZI:* 
+.chatbot on/off
+.chatbot private on/off
+.chatbot status
+
+👤 *Shomy Teach Land Chatbot* - Anajibu kama binadamu!` 
             }, { quoted: m });
         }
 
         const firstArg = args[0].toLowerCase();
 
+        // Status command
+        if (firstArg === 'status') {
+            const statusText = `📊 *Hali ya Shomy Teach Land*
+
+👥 *Group Mode:* ${state.perGroup?.[chatId]?.enabled ? '✅ IMEWASHA' : '❌ IMEZIMA'}
+👤 *Private Mode:* ${state.private ? '✅ IMEWASHA' : '❌ IMEZIMA'}
+💬 *Hali:* ${state.perGroup?.[chatId]?.enabled || state.private ? '🟢 Inafanya kazi' : '🔴 Imezimwa'}
+
+👤 *Jina:* Shomy Teach Land
+📍 *Mji:* Dar es Salaam
+💡 *Tabia:* Mcheshi, mkarimu, mwalimu`;
+
+            return await sock.sendMessage(chatId, { text: statusText }, { quoted: m });
+        }
+
         if (firstArg === 'private') {
             const mode = args[1]?.toLowerCase();
+            if (!['on', 'off'].includes(mode)) {
+                return await sock.sendMessage(chatId, { 
+                    text: '❌ Tafadhali tumia: .chatbot private on/off' 
+                }, { quoted: m });
+            }
             state.private = (mode === 'on');
             saveState(state);
-            return await sock.sendMessage(chatId, { text: `✅ Chatbot Private Mode: *${state.private ? 'ON' : 'OFF'}*` }, { quoted: m });
+            return await sock.sendMessage(chatId, { 
+                text: `✅ *Private Chatbot:* ${state.private ? 'IMEZINDWA 🟢' : 'IMEZIMWA 🔴'}` 
+            }, { quoted: m });
         }
 
         if (['on', 'off'].includes(firstArg)) {
@@ -176,18 +265,68 @@ async function groupChatbotToggleCommand(sock, chatId, m, body) {
                 if (!state.perGroup) state.perGroup = {};
                 state.perGroup[chatId] = { enabled: modeStatus };
                 saveState(state);
-                return await sock.sendMessage(chatId, { text: `✅ Chatbot Group: *${modeStatus ? 'ON' : 'OFF'}*` }, { quoted: m });
+                return await sock.sendMessage(chatId, { 
+                    text: `✅ *Group Chatbot:* ${modeStatus ? 'IMEZINDWA 🟢' : 'IMEZIMWA 🔴'}` 
+                }, { quoted: m });
             } else {
                 state.private = modeStatus;
                 saveState(state);
-                return await sock.sendMessage(chatId, { text: `✅ Chatbot Private: *${modeStatus ? 'ON' : 'OFF'}*` }, { quoted: m });
+                return await sock.sendMessage(chatId, { 
+                    text: `✅ *Private Chatbot:* ${modeStatus ? 'IMEZINDWA 🟢' : 'IMEZIMWA 🔴'}` 
+                }, { quoted: m });
             }
+        }
+
+        // Help
+        if (firstArg === 'help') {
+            return await sock.sendMessage(chatId, {
+                text: `👤 *Shomy Teach Land Chatbot*
+
+📌 *Amri:*
+• .chatbot on - Washa chatbot
+• .chatbot off - Zima chatbot
+• .chatbot private on - Washa private mode
+• .chatbot private off - Zima private mode
+• .chatbot status - Angalia hali
+• .chatbot help - Msaada huu
+
+🔧 *Tabia za Shomy:*
+• Mcheshi na mkarimu
+• Anafundisha kwa mbinu za mtaani
+• Anatumia Sheng na misemo ya kawaida
+• Anajibu kama rafiki wa karibu
+• Sio AI - ni mwanadamu halisi!
+
+💬 *Tuma ujumbe wowote kuanza mazungumzo!*`
+            }, { quoted: m });
         }
 
     } catch (e) { console.error('❌ Toggle Error:', e); }
 }
 
+// --- HELP FUNCTION ---
+function getHelp() {
+    return `👤 *Shomy Teach Land Chatbot*
+
+📌 *Amri:*
+• .chatbot on - Washa chatbot
+• .chatbot off - Zima chatbot
+• .chatbot private on - Washa private mode
+• .chatbot private off - Zima private mode
+• .chatbot status - Angalia hali
+
+🔧 *Tabia za Shomy:*
+• Mcheshi na mkarimu
+• Anafundisha kwa mbinu za mtaani
+• Anatumia Sheng na misemo ya kawaida
+• Anajibu kama rafiki wa karibu
+• Sio AI - ni mwanadamu halisi!
+
+💬 *Tuma ujumbe wowote kuanza mazungumzo na Shomy!*`;
+}
+
 module.exports = {
     handleChatbotMessage, 
-    groupChatbotToggleCommand
+    groupChatbotToggleCommand,
+    getHelp
 };
