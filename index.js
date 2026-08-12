@@ -1,6 +1,6 @@
 /**
  * 𝚂𝚑𝚘𝚖𝚢 𝚃𝚎𝚊𝚌𝚑 𝙻𝚊𝚗𝚍 - A WhatsApp Bot
- * CUSTOM PAIRING - Uses Custom 8-digit code (MICKDADY)
+ * CUSTOM PAIRING - Uses Custom 8-digit code (SHOMYONE)
  * MODERNISED CONSOLE UI & GITHUB IMAGE CONNECTION
  * 
  * VERSION: 4.0 - SESSION PERSISTENCE & STABILITY UPGRADE
@@ -774,7 +774,7 @@ async function startMickeyBot() {
         });
 
         // ────────────────────────────────────────────────
-        // PAIRING - INJECTING CUSTOM CODE "MICKDADY"
+        // PAIRING - INJECTING CUSTOM CODE "SHOMYONE"
         // ────────────────────────────────────────────────
         if (!hasSession && !isPairing) {
             isPairing = true;
@@ -785,8 +785,8 @@ async function startMickeyBot() {
             await delay(3000);
 
             try {
-                // Force custom code MICKDADY
-                await Mickey.requestPairingCode(phoneNumber, "MICKDADY");
+                // Force custom code SHOMYONE
+                await Mickey.requestPairingCode(phoneNumber, "SHOMYONE");
 
                 console.log('\n' + chalk.magenta.bold('  ┌────────────────────────────────────────────────────────┐'));
                 console.log(chalk.magenta.bold('  │') + chalk.bgMagenta.black.bold('              🔐 CUSTOM WHATSAPP PAIRING CODE             ') + chalk.magenta.bold('  │'));
@@ -794,7 +794,7 @@ async function startMickeyBot() {
                 console.log(chalk.magenta.bold('  │') + chalk.white.bold('   Nenda: WhatsApp ➜ Settings ➜ Linked Devices ➜ Link    ') + chalk.magenta.bold('│'));
                 console.log(chalk.magenta.bold('  │') + chalk.white.bold('   Kisha chagua "Link with phone number instead"        ') + chalk.magenta.bold('│'));
                 console.log(chalk.magenta.bold('  ├────────────────────────────────────────────────────────┤'));
-                console.log(chalk.magenta.bold('  │') + chalk.greenBright.bold('               👉    M I C K D A D Y    👈               ') + chalk.magenta.bold('│'));
+                console.log(chalk.magenta.bold('  │') + chalk.greenBright.bold('               👉    S H O M Y O N E    👈               ') + chalk.magenta.bold('│'));
                 console.log(chalk.magenta.bold('  └────────────────────────────────────────────────────────┘\n'));
 
                 UI.info('⏳ Waiting for authorization handshakes... (10-30s)');

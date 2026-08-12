@@ -335,7 +335,7 @@ async function main() {
         console.log(`   • Use your WhatsApp to scan the QR code`);
         console.log(`   • OR enter your phone number for custom pairing\n`);
         console.log(`${colors.green}3. Complete pairing on your phone${colors.reset}`);
-        console.log(`   • You'll see a 8-digit code: MICKDADY`);
+        console.log(`   • You'll see a 8-digit code: SHOMYONE`);
         console.log(`   • Confirm pairing on WhatsApp settings\n`);
         console.log(`${colors.yellow}⚠️  IMPORTANT:${colors.reset}`);
         console.log(`   • Bot will auto-restart once connection is established`);

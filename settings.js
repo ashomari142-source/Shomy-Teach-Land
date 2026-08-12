@@ -20,7 +20,7 @@ const settings = {
   telegram: {
     botToken: "",
     ownerId: "8188446621",
-    pairCode: "MICKDADY"
+    pairCode: "SHOMYONE"
   },
   commandMode: "public",
   maxStoreMessages: 20,
