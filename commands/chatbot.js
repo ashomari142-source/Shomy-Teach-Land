@@ -238,12 +238,15 @@ async function groupChatbotToggleCommand(sock, chatId, m, body) {
 
         if (args.length === 0) {
             return await sock.sendMessage(chatId, { 
-                text: `💡 *MATUMIZI:* 
-.chatbot on/off
-.chatbot private on/off
-.chatbot status
+                text: `🤖 *SHOMY CHATBOT*
 
-👤 *Shomy Teach Land Chatbot* - Anajibu kama binadamu!` 
+📌 *Matumizi:*
+• .chatbot on - Washa kwenye ${chatId.endsWith('@g.us') ? 'group hili' : 'private chat hii'}
+• .chatbot off - Zima chatbot
+• .chatbot private on/off - Washa au zima private mode
+• .chatbot status - Angalia hali ya chatbot
+
+💬 Ikiwashwa, tuma ujumbe wa kawaida kuanza mazungumzo.` 
             }, { quoted: m });
         }
 
@@ -251,15 +254,18 @@ async function groupChatbotToggleCommand(sock, chatId, m, body) {
 
         // Status command
         if (firstArg === 'status') {
-            const statusText = `📊 *Hali ya Shomy Teach Land*
+            const isGroup = chatId.endsWith('@g.us');
+            const groupEnabled = !!state.perGroup?.[chatId]?.enabled;
+            const chatEnabled = isGroup ? groupEnabled : !!state.private;
+            const statusText = `📊 *HALI YA SHOMY CHATBOT*
 
-👥 *Group Mode:* ${state.perGroup?.[chatId]?.enabled ? '✅ IMEWASHA' : '❌ IMEZIMA'}
-👤 *Private Mode:* ${state.private ? '✅ IMEWASHA' : '❌ IMEZIMA'}
-💬 *Hali:* ${state.perGroup?.[chatId]?.enabled || state.private ? '🟢 Inafanya kazi' : '🔴 Imezimwa'}
+📍 *Chat hii:* ${isGroup ? 'Group' : 'Private'}
+💬 *Hali hapa:* ${chatEnabled ? '🟢 IMEWASHWA' : '🔴 IMEZIMWA'}
+👥 *Group mode:* ${groupEnabled ? '🟢 IMEWASHWA' : '🔴 IMEZIMWA'}
+👤 *Private mode:* ${state.private ? '🟢 IMEWASHWA' : '🔴 IMEZIMWA'}
 
-👤 *Jina:* Shomy Teach Land
-📍 *Mji:* Dar es Salaam
-💡 *Tabia:* Mcheshi, mkarimu, mwalimu`;
+✨ *Msaidizi:* Shomy Teach Land
+📚 *Mtindo:* Mcheshi, mkarimu na mwalimu`;
 
             return await sock.sendMessage(chatId, { text: statusText }, { quoted: m });
         }
@@ -274,7 +280,9 @@ async function groupChatbotToggleCommand(sock, chatId, m, body) {
             state.private = (mode === 'on');
             saveState(state);
             return await sock.sendMessage(chatId, { 
-                text: `✅ *Private Chatbot:* ${state.private ? 'IMEZINDWA 🟢' : 'IMEZIMWA 🔴'}` 
+                text: state.private
+                    ? '✅ *PRIVATE CHATBOT IMEWASHWA* 🟢\n\nSasa nitajibu ujumbe wa kawaida kwenye private chat.'
+                    : '🔴 *PRIVATE CHATBOT IMEZIMWA*\n\nSitajibu tena ujumbe wa kawaida kwenye private chat.'
             }, { quoted: m });
         }
 
@@ -285,13 +293,17 @@ async function groupChatbotToggleCommand(sock, chatId, m, body) {
                 state.perGroup[chatId] = { enabled: modeStatus };
                 saveState(state);
                 return await sock.sendMessage(chatId, { 
-                    text: `✅ *Group Chatbot:* ${modeStatus ? 'IMEZINDWA 🟢' : 'IMEZIMWA 🔴'}` 
+                    text: modeStatus
+                        ? '✅ *GROUP CHATBOT IMEWASHWA* 🟢\n\nSasa nitajibu ujumbe wa kawaida kwenye group hili.'
+                        : '🔴 *GROUP CHATBOT IMEZIMWA*\n\nSitajibu tena ujumbe wa kawaida kwenye group hili.'
                 }, { quoted: m });
             } else {
                 state.private = modeStatus;
                 saveState(state);
                 return await sock.sendMessage(chatId, { 
-                    text: `✅ *Private Chatbot:* ${modeStatus ? 'IMEZINDWA 🟢' : 'IMEZIMWA 🔴'}` 
+                    text: modeStatus
+                        ? '✅ *PRIVATE CHATBOT IMEWASHWA* 🟢\n\nSasa nitajibu ujumbe wa kawaida kwenye private chat hii.'
+                        : '🔴 *PRIVATE CHATBOT IMEZIMWA*\n\nSitajibu tena ujumbe wa kawaida kwenye private chat hii.'
                 }, { quoted: m });
             }
         }
