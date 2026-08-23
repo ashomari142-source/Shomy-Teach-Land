@@ -1,12 +1,25 @@
 const axios = require('axios');
 const yts = require('yt-search');
 
+const AUDIO_APIS = [
+    { name: 'apiziaul-ytmp3', url: 'https://apiziaul.vercel.app/api/downloader/ytmp3', paramKey: 'url' },
+    { name: 'apiziaul-playmp3', url: 'https://apiziaul.vercel.app/api/downloader/ytplaymp3', paramKey: 'query' },
+    { name: 'nexray-savetube', url: 'https://api.nexray.eu.cc/downloader/savetube', paramKey: 'url', quality: 'mp3' },
+    { name: 'nexray-ytmp3', url: 'https://api.nexray.eu.cc/downloader/ytmp3', paramKey: 'url' },
+    { name: 'nexray-v1', url: 'https://api.nexray.eu.cc/downloader/v1/ytmp3', paramKey: 'url' }
+];
+
 const AXIOS_DEFAULTS = {
-    timeout: 30000,
+    timeout: 60000,
     headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        Accept: '*/*'
     }
 };
+
+const DOWNLOAD_TIMEOUT_MS = 120000;
+const audioCache = new Map();
+const CACHE_DURATION = 5 * 60 * 1000;
 
 async function tryRequest(getter, attempts = 2) {
     let lastErr;
@@ -21,197 +34,87 @@ async function tryRequest(getter, attempts = 2) {
     throw lastErr;
 }
 
-// Helper to convert stream to buffer (Safely handles large chunks)
-async function streamToBuffer(stream) {
-    return new Promise((resolve, reject) => {
-        const chunks = [];
-        stream.on('data', (chunk) => chunks.push(chunk));
-        stream.on('end', () => resolve(Buffer.concat(chunks)));
-        stream.on('error', (err) => reject(err));
+function isYouTubeUrl(value = '') {
+    return /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/))/i.test(value);
+}
+
+function extractYoutubeVideoId(ytUrl) {
+    try {
+        const url = new URL(ytUrl);
+        if (url.hostname === 'youtu.be') return url.pathname.slice(1);
+        return url.searchParams.get('v') || url.pathname.split('/').filter(Boolean)[1] || '';
+    } catch {
+        return '';
+    }
+}
+
+async function downloadAudioBuffer(downloadUrl) {
+    const response = await axios.get(downloadUrl, {
+        timeout: DOWNLOAD_TIMEOUT_MS,
+        responseType: 'arraybuffer',
+        maxRedirects: 15,
+        headers: {
+            ...AXIOS_DEFAULTS.headers,
+            Accept: 'audio/mpeg,audio/mp4,audio/flac,*/*;q=0.8',
+            Referer: 'https://www.youtube.com/'
+        }
     });
+
+    const buffer = Buffer.from(response.data);
+    if (buffer.length < 1000) throw new Error('Downloaded audio is too small');
+    return buffer;
 }
 
-// Function to get audio from Nayan AllDown API
-async function getAudioFromAllDown(ytUrl) {
-    let videoId = '';
-    if (ytUrl.includes('youtu.be/')) {
-        videoId = ytUrl.split('youtu.be/')[1].split('?')[0];
-    } else if (ytUrl.includes('youtube.com/watch')) {
-        const urlParams = new URLSearchParams(ytUrl.split('?')[1]);
-        videoId = urlParams.get('v');
-    }
+async function fetchFromMultipleAPIs(youtubeUrl) {
+    const results = await Promise.allSettled(AUDIO_APIS.map(async (apiConfig) => {
+        const params = new URLSearchParams({ [apiConfig.paramKey]: youtubeUrl });
+        if (apiConfig.quality) params.set('quality', apiConfig.quality);
+        const response = await axios.get(`${apiConfig.url}?${params.toString()}`, {
+            ...AXIOS_DEFAULTS,
+            timeout: 15000
+        });
+        return { apiConfig, data: response.data };
+    }));
 
-    if (!videoId) throw new Error('Invalid URL');
-
-    const apiUrl = `https://nayan-video-downloader.vercel.app/alldown?url=https://youtu.be/${videoId}`;
-
-    try {
-        const res = await tryRequest(() => axios.get(apiUrl, AXIOS_DEFAULTS));
-
-        if (res.data?.status === true && res.data?.data) {
-            const data = res.data.data;
-            const videoUrl = data.high || data.low;
-
-            if (!videoUrl) throw new Error('No download URL');
-
-            // FIXED: Using stream and removed timeout for large downloads
-            const fileRes = await tryRequest(() => axios.get(videoUrl, {
-                headers: AXIOS_DEFAULTS.headers,
-                responseType: 'stream'
-            }));
-
-            const buffer = await streamToBuffer(fileRes.data);
-
-            return {
-                buffer: buffer,
-                title: data.title,
-                thumbnail: data.thumbnail,
-                source: 'Nayan AllDown',
-                mimeType: 'audio/mp4'
-            };
-        }
-        throw new Error('API response invalid');
-    } catch (err) {
-        throw new Error(`AllDown failed: ${err.message}`);
-    }
-}
-
-// Function to get audio from Nayan YouTube API
-async function getAudioFromYoutubeAPI(ytUrl) {
-    let videoId = '';
-    if (ytUrl.includes('youtu.be/')) {
-        videoId = ytUrl.split('youtu.be/')[1].split('?')[0];
-    } else if (ytUrl.includes('youtube.com/watch')) {
-        const urlParams = new URLSearchParams(ytUrl.split('?')[1]);
-        videoId = urlParams.get('v');
-    }
-
-    if (!videoId) throw new Error('Invalid URL');
-
-    const apiUrl = `https://nayan-video-downloader.vercel.app/youtube?url=https://youtu.be/${videoId}`;
-
-    try {
-        const res = await tryRequest(() => axios.get(apiUrl, AXIOS_DEFAULTS));
-
-        if (res.data?.status === true && res.data?.data?.data?.formats) {
-            const formats = res.data.data.data.formats;
-            const title = res.data.data.data.title;
-            const thumbnail = res.data.data.data.thumbnail;
-            const author = res.data.data.data.author;
-
-            let bestAudio = null;
-            let priority = 0;
-
-            for (const format of formats) {
-                if (format.type === 'audio') {
-                    let p = 0;
-                    if (format.formatId === '251') p = 100;
-                    else if (format.formatId === '250') p = 90;
-                    else if (format.formatId === '249') p = 85;
-                    else if (format.formatId === '140') p = 80;
-                    else if (format.formatId === '139') p = 70;
-
-                    if (p > priority) {
-                        priority = p;
-                        bestAudio = format;
-                    }
-                }
-            }
-
-            if (!bestAudio) {
-                for (const format of formats) {
-                    if (format.type === 'video_with_audio' && format.mimeType?.includes('mp4')) {
-                        bestAudio = format;
-                        break;
-                    }
-                }
-            }
-
-            if (bestAudio?.url) {
-                // FIXED: Using stream and removed timeout for large downloads
-                const fileRes = await tryRequest(() => axios.get(bestAudio.url, {
-                    headers: AXIOS_DEFAULTS.headers,
-                    responseType: 'stream'
-                }));
-
-                const buffer = await streamToBuffer(fileRes.data);
-
-                return {
-                    buffer: buffer,
-                    title: title,
-                    thumbnail: thumbnail,
-                    author: author,
-                    quality: bestAudio.quality || bestAudio.label,
-                    source: 'Nayan YouTube API',
-                    mimeType: 'audio/mp4'
-                };
+    for (const result of results) {
+        if (result.status === 'fulfilled' && result.value.data?.status !== false) {
+            const data = result.value.data;
+            if (data?.result?.url || data?.result?.downloadUrl || data?.result?.download_link) {
+                return result.value;
             }
         }
-        throw new Error('No audio format found');
-    } catch (err) {
-        throw new Error(`YouTube API failed: ${err.message}`);
     }
-}
-
-async function getAudioFromPrexzyAPI(ytUrl) {
-    let videoId = '';
-    if (ytUrl.includes('youtu.be/')) {
-        videoId = ytUrl.split('youtu.be/')[1].split('?')[0];
-    } else if (ytUrl.includes('youtube.com/watch')) {
-        const urlParams = new URLSearchParams(ytUrl.split('?')[1]);
-        videoId = urlParams.get('v');
-    }
-
-    if (!videoId) throw new Error('Invalid YouTube URL for Prexzy API');
-
-    const encodedYoutubeUrl = encodeURIComponent(`https://youtu.be/${videoId}`);
-    const apiUrl = `https://prexzyapis.com/download/youtube-audio?url=${encodedYoutubeUrl}`;
-
-    try {
-        const res = await tryRequest(() => axios.get(apiUrl, AXIOS_DEFAULTS));
-
-        if (res.data?.status === true && res.data?.download_url) {
-            const data = res.data;
-            const downloadUrl = data.download_url;
-
-            const fileRes = await tryRequest(() => axios.get(downloadUrl, {
-                headers: AXIOS_DEFAULTS.headers,
-                responseType: 'stream'
-            }));
-
-            const buffer = await streamToBuffer(fileRes.data);
-
-            return {
-                buffer: buffer,
-                title: data.info?.title || 'Unknown Title',
-                thumbnail: data.info?.thumbnail,
-                source: 'Prexzy API',
-                mimeType: 'audio/mp3' // Assuming it's always mp3 from this API
-            };
-        }
-        throw new Error('Prexzy API response invalid or no download URL');
-    } catch (err) {
-        throw new Error(`Prexzy API failed: ${err.message}`);
-    }
+    return null;
 }
 
 async function getYoutubeAudio(ytUrl) {
-    try {
-        console.log('[PLAY] Trying Prexzy API...');
-        return await getAudioFromPrexzyAPI(ytUrl);
-    } catch (prexzyErr) {
-        console.log(`[PLAY] Prexzy API failed: ${prexzyErr.message}, trying AllDown API...`);
-        try {
-            return await getAudioFromAllDown(ytUrl);
-        } catch (allDownErr) {
-            console.log(`[PLAY] AllDown failed: ${allDownErr.message}, trying YouTube API...`);
-            try {
-                return await getAudioFromYoutubeAPI(ytUrl);
-            } catch (ytErr) {
-                throw new Error(`All APIs failed: ${ytErr.message}`);
-            }
-        }
-    }
+    const videoId = extractYoutubeVideoId(ytUrl);
+    if (!videoId) throw new Error('Invalid YouTube URL');
+
+    const cached = audioCache.get(videoId);
+    if (cached && Date.now() - cached.timestamp < CACHE_DURATION) return cached.data;
+
+    const result = await fetchFromMultipleAPIs(ytUrl);
+    if (!result) throw new Error('All API sources failed');
+
+    const resultData = result.data.result;
+    const downloadUrl = resultData.url || resultData.downloadUrl || resultData.download_link;
+    if (!downloadUrl) throw new Error(`Could not extract download URL from ${result.apiConfig.name}`);
+
+    const buffer = await downloadAudioBuffer(downloadUrl);
+    const audioData = {
+        buffer,
+        title: String(resultData.title || resultData.name || 'Unknown Title').replace(/\s+/g, ' ').trim(),
+        thumbnail: resultData.thumbnail || resultData.thumb || '',
+        quality: resultData.quality || resultData.bitrate || '128kbps',
+        duration: resultData.duration || resultData.dur || 'Unknown',
+        source: result.apiConfig.name,
+        videoUrl: ytUrl,
+        videoId
+    };
+
+    audioCache.set(videoId, { data: audioData, timestamp: Date.now() });
+    return audioData;
 }
 
 async function playCommand(sock, chatId, message) {
