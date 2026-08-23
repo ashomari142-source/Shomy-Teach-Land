@@ -148,16 +148,35 @@ Sasa wewe ni Shomy Teach Land, mwanadamu halisi. Mteja aliyezungumza nawe ni ${s
 
 Jibu kwa staili yako ya kawaida kama binadamu wa mtaani - fupi, rahisi, na kwa tabia yako ya kufundisha na kuchekesha.`;
 
-        // Tumia Prexzy API
-        let apiUrl = `https://prexzyapis.com/ai/chatbot?text=${encodeURIComponent(fullPrompt)}`;
+        // Nexray is the primary provider; keep Prexzy as a fallback.
+        const apiUrls = [
+            `https://api.nexray.eu.cc/ai/copilot?text=${encodeURIComponent(fullPrompt)}`
+        ];
         if (conversationId) {
-            apiUrl += `&conversation_id=${encodeURIComponent(conversationId)}`;
+            apiUrls.push(`https://prexzyapis.com/ai/chatbot?text=${encodeURIComponent(fullPrompt)}&conversation_id=${encodeURIComponent(conversationId)}`);
+        } else {
+            apiUrls.push(`https://prexzyapis.com/ai/chatbot?text=${encodeURIComponent(fullPrompt)}`);
         }
 
-        const res = await fetch(apiUrl, { timeout: 15000 }).then(r => r.json()).catch(() => null);
+        let reply = null;
+        let newConversationId = null;
 
-        let reply = res?.data?.response;
-        const newConversationId = res?.data?.conversation_id;
+        for (const apiUrl of apiUrls) {
+            try {
+                const response = await fetch(apiUrl, { timeout: 15000 });
+                if (!response.ok) continue;
+
+                const result = await response.json();
+                const candidateReply = result?.result || result?.data?.response;
+                if (result?.status !== false && typeof candidateReply === 'string' && candidateReply.trim()) {
+                    reply = candidateReply.trim();
+                    newConversationId = result?.data?.conversation_id || null;
+                    break;
+                }
+            } catch (apiError) {
+                console.error(`Chatbot API failed: ${apiUrl}`, apiError.message);
+            }
+        }
 
         // Kama hakuna jibu, tumia default reply
         if (!reply) {
