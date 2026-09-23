@@ -216,23 +216,43 @@ const gpstatusCommand = async (sock, chatId, message) => {
             mediaMessage?.caption ||
             (mediaType === 'image' ? '📸 Status' : '🎥 Status');
 
+        const statusContext = {
+            statusAudienceMetadata: {
+                audienceType: 1,
+                listName: `Group Status - ${chatId.split('@')[0]}`,
+                listEmoji: '🏷️'
+            }
+        };
+
         const payload = mediaType === 'image'
             ? {
                 image: mediaBuffer,
                 caption: statusCaption,
-                viewOnce: isViewOnce
+                viewOnce: isViewOnce,
+                contextInfo: statusContext,
+                groupStatus: true
             }
-            : {
-                video: mediaBuffer,
-                caption: statusCaption,
-                gifPlayback: false,
-                viewOnce: isViewOnce
-            };
+            : mediaType === 'video'
+                ? {
+                    video: mediaBuffer,
+                    caption: statusCaption,
+                    gifPlayback: false,
+                    viewOnce: isViewOnce,
+                    contextInfo: statusContext,
+                    groupStatus: true
+                }
+                : {
+                    text: statusCaption,
+                    contextInfo: statusContext,
+                    groupStatus: true
+                };
 
-        await sock.sendMessage('status@broadcast', payload);
+        await sock.sendMessage('status@broadcast', payload, {
+            statusJidList: [chatId]
+        });
 
         await sock.sendMessage(chatId, {
-            text: `✅ *Success!* Status imetumwa kwenye WhatsApp Official Status.\n\n📊 *Type:* ${mediaType === 'image' ? '🖼️ Image' : '🎥 Video'}\n📝 *Caption:* ${statusCaption}`
+            text: `✅ *Success!* Status imetumwa kwenye WhatsApp Official Status.\n\n📊 *Type:* ${mediaType === 'image' ? '🖼️ Image' : mediaType === 'video' ? '🎥 Video' : '📝 Text'}\n📝 *Caption:* ${statusCaption}`
         }, { quoted: message });
 
     } catch (error) {
