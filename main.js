@@ -729,7 +729,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
 
             if (isGroup) {
                 await handleTagDetection(sock, chatId, message, senderId);
-                await handleMentionDetection(sock, chatId, message);
+                // Mention auto-reply feature disabled.
             }
 
             try {
@@ -1754,7 +1754,6 @@ We will process it and send you an update shortly.`
             default:
                 if (isGroup) {
                     await handleTagDetection(sock, chatId, message, senderId);
-                    await handleMentionDetection(sock, chatId, message);
                 }
                 commandExecuted = false;
                 break;
