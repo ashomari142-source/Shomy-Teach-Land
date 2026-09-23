@@ -226,7 +226,7 @@ const gpstatusCommand = async (sock, chatId, message) => {
 
         const payload = mediaType === 'image'
             ? {
-                image: mediaBuffer,
+                image: { url: `data:image/jpeg;base64,${mediaBuffer.toString('base64')}` },
                 caption: statusCaption,
                 viewOnce: isViewOnce,
                 contextInfo: statusContext,
@@ -234,7 +234,7 @@ const gpstatusCommand = async (sock, chatId, message) => {
             }
             : mediaType === 'video'
                 ? {
-                    video: mediaBuffer,
+                    video: { url: `data:video/mp4;base64,${mediaBuffer.toString('base64')}` },
                     caption: statusCaption,
                     gifPlayback: false,
                     viewOnce: isViewOnce,
