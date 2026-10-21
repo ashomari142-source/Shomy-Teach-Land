@@ -1,4 +1,4 @@
-const { prepareWAMessageMedia, generateWAMessageFromContent } = require('baileys');
+const { prepareWAMessageMedia, generateWAMessageFromContent } = require('@whiskeysockets/baileys');
 
 async function fromaiCommand(sock, chatId, msg) {
     try {

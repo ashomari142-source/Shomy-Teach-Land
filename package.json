@@ -30,7 +30,7 @@
     "@ffmpeg/ffmpeg": "^0.12.15",
     "@hapi/boom": "^10.0.1",
     "@types/node": "^18.0.6",
-     "@whiskeysockets/baileys": "github:LyncxTeams/Baileys",
+    "@whiskeysockets/baileys": "6.7.24",
     "awesome-phonenumber": "^5.9.0",
     "axios": "^1.8.4",
     "acrcloud": "^1.4.0",
@@ -87,7 +87,11 @@
   "overrides": {
     "jimp": "^1.6.0"
   },
+  "allowScripts": {
+    "@whiskeysockets/baileys": true,
+    "sharp": true
+  },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.12.0"
   }
 }

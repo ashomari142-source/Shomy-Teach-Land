@@ -1,4 +1,4 @@
-const { prepareWAMessageMedia, generateWAMessageFromContent } = require('baileys');
+const { prepareWAMessageMedia, generateWAMessageFromContent } = require('@whiskeysockets/baileys');
 const { createCtx } = require('../lib/messageBuilder');
 
 async function pairedMediaCommand(sock, chatId, message, args) {
