@@ -1,9 +1,9 @@
 const os = require('os');
-const { generateWAMessageFromContent } = require('@whiskeysockets/baileys');
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 const { OMMY_IMAGE_URL, OMMY_IMAGE_PATH, hasLocalOmmyImage } = require('../lib/ommyMedia');
+const { ButtonV2 } = require('../lib/messageBuilder');
 
 // ═══════════════════════════════════════════════════════════════
 // 👑 OWNER PROFILE COMMAND - SHOMY TEACH CONFIGURATION
@@ -138,7 +138,7 @@ const ownerCommand = async (sock, chatId, message) => {
         };
 
         // ═══════════════════════════════════════════════════════════════
-        // MESSAGE BUILDER - NATIVE BUTTON WITH IMAGE
+        // MESSAGE BUILDER - INTERACTIVE OWNER PROFILE CARD
         // ═══════════════════════════════════════════════════════════════
         const sendProfileMessage = async () => {
             let profileImage = null;
@@ -167,57 +167,28 @@ const ownerCommand = async (sock, chatId, message) => {
                 }
             }
 
-            // Step 3: Prepare message context
-            const contextInfo = {
-                forwardingScore: 999,
-                isForwarded: true,
-            };
-            
+            // Step 3: Build the profile card with the shared message builder.
+            const builder = new ButtonV2(sock)
+                .setTitle(CONFIG.OWNER.NAME)
+                .setSubtitle(CONFIG.OWNER.TITLE)
+                .setBody(statusMessage)
+                .setFooter(CONFIG.FOOTER)
+                .setContextInfo({
+                    forwardingScore: 1,
+                    isForwarded: true,
+                });
+
+            if (profileImage) builder.setThumbnail(profileImage);
+
             const mentionJid = messageKey.participant || messageKey.remoteJid;
-            if (mentionJid) contextInfo.mentionedJid = [mentionJid];
+            if (mentionJid) builder.setContextInfo({ mentionedJid: [mentionJid] });
 
-            // Step 4: Build and send the message
-            console.log('  [Step 3] Building message structure...');
-            const messageContent = generateWAMessageFromContent(chatId, {
-                buttonsMessage: {
-                    contentText: statusMessage,
-                    footerText: CONFIG.FOOTER,
-                    headerType: 6,
-                    locationMessage: {
-                        degreesLatitude: 0,
-                        degreesLongitude: 0,
-                        name: CONFIG.OWNER.NAME,
-                        address: CONFIG.OWNER.TITLE,
-                        jpegThumbnail: profileImage
-                    },
-                    viewOnce: true,
-                    contextInfo,
-                    buttons: contactButtons
-                }
-            }, { userJid: (sock && sock.user && sock.user.id) || '', quoted: message || undefined });
-
-            console.log('  [Step 4] Sending message via relay...');
-            await sock.relayMessage(chatId, messageContent.message, {
-                messageId: messageContent.key?.id || sock.generateMessageID(),
-                additionalNodes: [
-                    {
-                        tag: 'biz',
-                        attrs: {},
-                        content: [
-                            {
-                                tag: 'interactive',
-                                attrs: { type: 'native_flow', v: '1' },
-                                content: [
-                                    {
-                                        tag: 'native_flow',
-                                        attrs: { v: '9', name: 'mixed' }
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
+            contactButtons.forEach(({ buttonId, buttonText }) => {
+                builder.button(buttonText.displayText, buttonId);
             });
+
+            console.log('  [Step 3] Sending owner profile card...');
+            await builder.send(chatId, { quoted: message || undefined, fallbackText: statusMessage });
             console.log('  ✅ Profile message sent successfully\n');
         };
 
